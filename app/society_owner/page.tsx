@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 interface SocietyOwner {
   _id: string;
   name: string;
@@ -14,7 +13,6 @@ interface SocietyOwner {
   address: string;
   approved: boolean;
 }
-
 interface Guard {
   _id: string;
   name: string;
@@ -23,7 +21,6 @@ interface Guard {
   society: string;
   setDuty: string | null;
 }
-
 const Page = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -37,7 +34,6 @@ const Page = () => {
   const [showNotifyModal, setShowNotifyModal] = useState(false);
   const [message, setMessage] = useState("");
   const today = new Date().toISOString().split("T")[0];
-
   useEffect(() => {
     const fetchSocietyOwner = async () => {
       if (session?.user?.role === "society_owner") {
@@ -51,10 +47,8 @@ const Page = () => {
         }
       }
     };
-
     fetchSocietyOwner();
   }, [session]);
-
   useEffect(() => {
     const fetchGuards = async () => {
       if (ownerDetails?.society) {
@@ -90,7 +84,6 @@ const Page = () => {
     setGuardToConfirm(guardId);
     setShowModal(true);
   };
-
   const handleNotify = () => {
     if (!selectedGuardDetails) {
       alert("No guard selected to notify.");
@@ -98,22 +91,18 @@ const Page = () => {
     }
     setShowNotifyModal(true);
   };
-
   const sendNotification = async (recipient: "admin" | "guard") => {
     if (!message.trim()) {
       alert("Please enter a message before notifying.");
       return;
     }
-
     if (!selectedGuardDetails) {
       alert("No guard selected to notify.");
       return;
     }
-
     try {
       let apiEndpoint = "";
       let requestBody = {};
-
       if (recipient === "admin") {
         apiEndpoint = "/api/notify-admin";
         requestBody = {
@@ -126,19 +115,15 @@ const Page = () => {
         apiEndpoint = "/api/notify-guard";
         requestBody = { guardId: selectedGuardDetails._id };
       }
-
       const res = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         throw new Error(data.message || "Failed to send notification");
       }
-
       alert(
         `✅ ${recipient === "admin" ? "Admin" : "Guard"} notified successfully!`
       );
@@ -149,7 +134,6 @@ const Page = () => {
       alert(`Error: ${error.message}`);
     }
   };
-
   const confirmSelection = async () => {
     if (!guardToConfirm || !ownerDetails?.society) return;
     try {

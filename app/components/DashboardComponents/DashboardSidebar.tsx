@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Sidebar, SidebarBody, SidebarLink } from "../../../components/ui/DashSidebar";
 import {
   IconArrowLeft,
@@ -23,17 +25,19 @@ interface DashboardSidebarProps {
 }
 
 export default function DashboardSidebar({ child }: DashboardSidebarProps) {
+      const { data: session } = useSession();
+      const router = useRouter();
     const links: LinkType[] = [
         {
-            label: "Dashboard",
-            href: "#",
+            label: "Home ",
+            href: "/",
             icon: (
                 <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
-            label: "Admin",
-            href: "/admin",
+            label: "Dashboard",
+            href: `/${session?.user?.role}`,
             icon: (
                 <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
@@ -47,7 +51,7 @@ export default function DashboardSidebar({ child }: DashboardSidebarProps) {
         },
         {
             label: "Logout",
-            href: "#",
+            href:  `/${session?.user?.role}`,
             icon: (
                 <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),

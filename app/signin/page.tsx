@@ -91,7 +91,7 @@ const SignIn = () => {
   };
   const role = form.watch("role"); 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center m-auto border-2 border-black p-4" >
       <Tabs defaultValue="signin">
         <TabsList className="flex space-x-4">
           <TabsTrigger value="signin">Sign In</TabsTrigger>

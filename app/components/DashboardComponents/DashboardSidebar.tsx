@@ -32,8 +32,8 @@ export default function DashboardSidebar({ child }: DashboardSidebarProps) {
             ),
         },
         {
-            label: "Profile",
-            href: "#",
+            label: "Admin",
+            href: "/admin",
             icon: (
                 <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),

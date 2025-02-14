@@ -4,7 +4,7 @@ import StatsCard from '@/app/components/DashboardComponents/StatsCard';
 import GuardMap from '@/app/components/DashboardComponents/GuardMap';
 import AlertsList from '@/app/components/DashboardComponents/AlertsList';
 import GuardsList from '@/app/components/DashboardComponents/GuardList';
-const page = () => {
+const AdminDashboard = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50">
       {/* Header */}
@@ -93,4 +93,4 @@ const page = () => {
   )
 }
 
-export default page
+export default AdminDashboard; 

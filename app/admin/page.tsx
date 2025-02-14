@@ -1,25 +1,21 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import io, { Socket } from "socket.io-client";
 import {
-  Bell,
-  MapPin,
-  Shield,
-  Users,
   AlertTriangle,
   Clock,
-  Star,
-  Menu,
+  MapPin,
+  Users
 } from "lucide-react";
-import StatsCard from "../components/DashboardComponents/StatsCard";
-import GuardMap from "../components/DashboardComponents/GuardMap";
+import { useEffect, useRef, useState } from "react";
+import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
-import GuardsList from "../components/DashboardComponents/GuardList";
 import ChartPage from "../components/DashboardComponents/ChartPage";
+import GuardsList from "../components/DashboardComponents/GuardList";
+import GuardMap from "../components/DashboardComponents/GuardMap";
+import StatsCard from "../components/DashboardComponents/StatsCard";
 
-const ENDPOINT = "https://mainserver-e972.onrender.com";
+const ENDPOINT = "http://localhost:4000";
 
 const MapComponent = () => {
   const [data, setData] = useState<
@@ -28,13 +24,7 @@ const MapComponent = () => {
       name: string;
       coords: { latitude: number; longitude: number };
     }[]
-  >([
-    {
-      socketId: "Lwe9dprcNETPVyHkg4AAAR",
-      name: "User",
-      coords: { latitude: 22.77575, longitude: 86.14689 },
-    },
-  ]);
+  >([]);
 
   const socketRef = useRef<Socket>(null);
   const mapRef = useRef(null);
@@ -45,13 +35,13 @@ const MapComponent = () => {
 
     socketRef.current.emit("get-data");
     socketRef.current.on("message", (data) => {
-      setData((prevData) => [...prevData, ...data]);
+      setData(data);
     });
 
     return () => {
       socketRef.current?.disconnect();
     };
-  }, []);
+  }, [setData]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -63,22 +53,27 @@ const MapComponent = () => {
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
-    const onLocationFound = (e) => {
-      const radius = e.accuracy / 2;
-      const userMarker = L.marker(e.latlng, {
-        icon: L.icon({
-          iconUrl:
-            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowUrl:
-            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-          shadowSize: [41, 41],
-        }),
-      }).addTo(map);
-      userMarker.bindPopup("You are here").openPopup();
-      L.circle(e.latlng, radius).addTo(map);
+    interface LocationEvent {
+      accuracy: number;
+      latlng: L.LatLng;
+    }
+
+    const onLocationFound = (e: LocationEvent): void => {
+      const radius: number = e.accuracy / 2;
+      // const userMarker = L.marker(e.latlng, {
+      //   icon: L.icon({
+      //     iconUrl:
+      //       "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+      //     iconSize: [25, 41],
+      //     iconAnchor: [12, 41],
+      //     popupAnchor: [1, -34],
+      //     shadowUrl:
+      //       "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+      //     shadowSize: [41, 41],
+      //   }),
+      // }).addTo(map);
+      // userMarker.bindPopup("You are here").openPopup();
+      // L.circle(e.latlng, radius).addTo(map);
     };
 
     map.locate({ setView: true, maxZoom: 16 });

@@ -64,7 +64,7 @@ const MapComponent = () => {
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
-    const onLocationFound = (e) => {
+    const onLocationFound = (e: any) => {
       const radius = e.accuracy / 2;
       const userMarker = L.marker(e.latlng, {
         icon: L.icon({

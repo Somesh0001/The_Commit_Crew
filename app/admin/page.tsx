@@ -18,6 +18,7 @@ import GuardMap from "../components/DashboardComponents/GuardMap";
 import AlertsList from "../components/DashboardComponents/AlertsList";
 import GuardsList from "../components/DashboardComponents/GuardList";
 import ChartPage from "../components/DashboardComponents/ChartPage";
+import GuardRequestBox from "../components/DashboardComponents/GuardRequestBox";
 
 const ENDPOINT = "https://mainserver-e972.onrender.com";
 
@@ -37,8 +38,8 @@ const MapComponent = () => {
   ]);
 
   const socketRef = useRef<Socket>(null);
-  const mapRef = useRef(null);
-  const markersRef = useRef([]);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
 
   useEffect(() => {
     socketRef.current = io(ENDPOINT);
@@ -107,7 +108,7 @@ const MapComponent = () => {
             "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
           shadowSize: [41, 41],
         }),
-      }).addTo(mapRef.current);
+      }).addTo(mapRef.current!);
 
       marker.bindPopup(`${user.name}`).openPopup();
       markersRef.current.push(marker);
@@ -116,10 +117,7 @@ const MapComponent = () => {
 
   return (
     <div>
-      {JSON.stringify(data)}
-      <div id="map" style={{ width: "80vw", height: "80vh" }}></div>
-
-      <div className="w-full ">
+      <div className="w-full  ">
         {/* Main Content */}
         <main className="  px-4 sm:px-6 lg:px-8 py-8">
           {/* Stats Grid */}
@@ -160,10 +158,12 @@ const MapComponent = () => {
                     Live Guard Locations
                   </h2>
                 </div>
-                <div className="p-4">
-                  <GuardMap />
+                <div className="p-4 z-0">
+                  {JSON.stringify(data)}
+                  <div id="map" className="z-0" style={{ width: "50vw", height: "50vh" }}></div>
                 </div>
               </div>
+                <GuardRequestBox/>
             </div>
 
             {/* Alerts and Guards List */}

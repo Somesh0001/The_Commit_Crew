@@ -94,7 +94,9 @@ export default function DashboardSidebar({ child }: DashboardSidebarProps) {
                     </div>
                 </SidebarBody>
             </Sidebar>
+            <div className="overflow-scroll w-full h-full">
             {child}
+            </div>
             {/* <Dashboard /> */}
         </div>
     );

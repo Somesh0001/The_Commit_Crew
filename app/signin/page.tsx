@@ -9,7 +9,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { ToastContainer, toast } from 'react-toastify';
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 import {
   Form,
   FormControl,
@@ -42,6 +43,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { toast } = useToast()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await signIn("credentials", {
@@ -75,18 +77,18 @@ const SignIn = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      toast("User Registered Successfully");
+      toast({title: "User Registered Successfully"})
       const result = await response.json();
       if (response.ok) {
         console.log("User Registered:", result);
-        toast("User Registered Successfully");
+        toast({title: "User Registered Successfully"})
       } else {
         console.error("Registration Error:", result);
-        toast("Registration Error: " + result.error);
+        toast({title: "Registration Error: " + result.error})
       }
     } catch (error) {
       console.error("Error registering user:", error);
-      toast("Registration Error: " + error);
+      toast({title: "Some error occured"})
     }
   };
   const role = form.watch("role");

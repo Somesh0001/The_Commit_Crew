@@ -91,6 +91,14 @@ const Page = () => {
     }
     setShowNotifyModal(true);
   };
+  const sendSOS = async () => {
+    setMessage("Emergency SOS !!");
+    setTimeout(() => {
+      sendNotification("guard");
+      sendNotification("admin");
+    }, 0);
+  };
+  
   const sendNotification = async (recipient: "admin" | "guard") => {
     if (!message.trim()) {
       alert("Please enter a message before notifying.");
@@ -165,6 +173,12 @@ const Page = () => {
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Society Owner Dashboard
         </h1>
+        <button
+          onClick={() => sendSOS()}
+          className="px-6 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-800 transition"
+        >
+          SOS
+        </button>
 
         {ownerDetails && (
           <div className="mt-6 p-6 bg-gray-100 border-l-4 border-gray-500 rounded-lg">

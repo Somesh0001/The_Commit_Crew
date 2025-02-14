@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 
@@ -31,14 +32,14 @@ const GuardRequestBox = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl h-[50vh] rounded-md overflow-scroll shadow-lg mt-4">
+    <div className="w-full h-[50vh] rounded-md overflow-scroll shadow-lg mt-4">
       <h3 className="text-lg font-semibold p-4 bg-green-200 text-black">Guard Requests</h3>
       <ul className="p-4 bg-green-100 space-y-2">
         {guards.length === 0 ? (
           <p className="text-gray-500">No unapproved guards found.</p>
         ) : (
-          guards.map((guard) => (
-            <li  className="flex justify-between bg-slate-100 p-2 rounded-md">
+          guards.map((guard,i) => (
+            <li key={i}  className="flex justify-between bg-slate-100 p-2 rounded-md">
               <div>{guard.name}</div>
               <Modal guard={guard} />
             </li>

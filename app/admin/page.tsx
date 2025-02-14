@@ -38,7 +38,6 @@ const MapComponent = () => {
     if (socketRef.current) {
       socketRef.current.emit("get-data");
       socketRef.current.on("message", (data) => {
-        console.log(data);
         setData(data);
       });
       socketRef.current.on("new-user", (data) => {
@@ -112,7 +111,7 @@ const MapComponent = () => {
         }),
       }).addTo(mapRef.current!);
 
-      marker.bindPopup(`${user.name}`).openPopup();
+      marker.bindPopup(`${user.name || user.coords.name}`).openPopup();
       markersRef.current.push(marker);
     });
   }, [data]);

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { startAuthentication } from "@simplewebauthn/browser";
 
@@ -16,7 +16,6 @@ const Page = () => {
   const watchLocation = useRef<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-
 
   const [users, setUsers] = useState<
     {
@@ -42,16 +41,21 @@ const Page = () => {
   };
 
   useEffect(() => {
-    connectSocket();
-
     setInterval(() => {
       if (socketRef.current) {
+        console.log("socketRef.current", socketRef.current);
         navigator.geolocation.getCurrentPosition(
           positionChange,
           locationResolveError
         );
       }
     }, 1000);
+  },[currentUser])
+
+  useEffect(() => {
+    connectSocket();
+
+    
     if (socketRef.current) {
       socketRef.current.on("new-user", (data) => {
         setUsers((users) => [...users, data]);
@@ -95,9 +99,7 @@ const Page = () => {
   }) {
     const latitude = data.coords.latitude;
     const longitude = data.coords.longitude;
-    console.log("position change", latitude, longitude, currentUser);
     if (socketRef.current && currentUser) {
-      console.log("position change");
       socketRef.current.emit("position-change", {
         socketId: currentUser?.socketId,
         coords: {
@@ -158,12 +160,12 @@ const Page = () => {
     });
   }
 
-
-
   async function handleFingerprintVerification() {
     setIsVerifying(true);
     try {
-      const optionsResponse = await fetch("/api/generate-authentication-options");
+      const optionsResponse = await fetch(
+        "/api/generate-authentication-options"
+      );
       const options = await optionsResponse.json();
       const authResp = await startAuthentication(options);
       const verificationResponse = await fetch("/api/verify-authentication", {
@@ -206,12 +208,12 @@ const Page = () => {
     setModalOpen(true);
   }
 
-
-
-
   return (
-<div className="p-4 h-[60vh] flex flex-col justify-center items-center">
+    <div className="p-4 h-[60vh] flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold mb-4">Start Attendance</h1>
+      <Button onClick={initUserLocation} className="mb-4">
+        Get Location
+      </Button>
       <Button onClick={handleStartAttendance} className="mb-4">
         Start Attendance
       </Button>
@@ -229,8 +231,13 @@ const Page = () => {
             <h2 className="text-xl font-semibold mb-2">
               Fingerprint Verification
             </h2>
-            <p className="mb-4">Please scan your fingerprint to mark your attendance.</p>
-            <Button onClick={handleFingerprintVerification} disabled={isVerifying}>
+            <p className="mb-4">
+              Please scan your fingerprint to mark your attendance.
+            </p>
+            <Button
+              onClick={handleFingerprintVerification}
+              disabled={isVerifying}
+            >
               {isVerifying ? "Verifying..." : "Scan Fingerprint"}
             </Button>
             <Button

@@ -175,9 +175,20 @@ const Page = () => {
           title: "Fingerprint Verified",
           description: "Attendance marked present.",
         });
-        // Once fingerprint is verified, mark attendance (e.g., using location)
+        // Mark attendance via location update
         initUserLocation();
         setModalOpen(false);
+
+        // *** Login the user using NextAuth credentials ***
+        // Make sure the credentials provider in your NextAuth configuration is set up
+        // to accept 'fingerprintVerified' and bypass the password check.
+        await signIn("credentials", {
+          // You may use session?.user?.email if the user is already logged in,
+          // or get the email from an input if not logged in.
+          email: session?.user?.email || "",
+          fingerprintVerified: "true",
+          callbackUrl: "/dashboard", // Redirect after sign in
+        });
       } else {
         toast({
           title: "Verification Failed",

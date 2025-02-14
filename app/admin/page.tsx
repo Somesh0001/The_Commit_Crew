@@ -1,3 +1,4 @@
+
 "use client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,7 +15,6 @@ import ChartPage from "../components/DashboardComponents/ChartPage";
 import GuardsList from "../components/DashboardComponents/GuardList";
 import GuardMap from "../components/DashboardComponents/GuardMap";
 import StatsCard from "../components/DashboardComponents/StatsCard";
-import GuardRequestBox from "../components/DashboardComponents/GuardRequestBox";
 
 const ENDPOINT = "http://localhost:4000";
 
@@ -158,7 +158,7 @@ const MapComponent = () => {
                   <div id="map" className="z-0" style={{ width: "50vw", height: "50vh" }}></div>
                 </div>
               </div>
-                <GuardRequestBox/>
+                
             </div>
 
             {/* Alerts and Guards List */}

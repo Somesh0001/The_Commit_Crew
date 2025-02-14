@@ -6,8 +6,8 @@ import AuthProvider from './context/AuthProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'IEEE NITJSR',
-  description: 'The official IEEE Website of NIT JSR',
+  title: 'The Commit Crew ',
+  description: 'Ojass Hackathon file of the commit crew',
 }
 
 export default function RootLayout({

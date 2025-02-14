@@ -9,6 +9,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 import {
   Form,
   FormControl,
@@ -18,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 const formSchema = z.object({
   role: z.enum(["guard", "police", "society_owner", "field_visitor"]),
   name: z.string().min(2, "Name must be at least 2 characters").max(50),
@@ -37,13 +38,12 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   approved: z.boolean().default(false),
 });
-
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
+  const { toast } = useToast()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await signIn("credentials", {
@@ -62,7 +62,6 @@ const SignIn = () => {
       router.push(res.url);
     }
   };
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -70,7 +69,6 @@ const SignIn = () => {
       approved: false,
     },
   });
-
   const onSubmit = async (data: any) => {
     console.log("Form submitted", data);
     try {
@@ -79,19 +77,21 @@ const SignIn = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      toast({title: "User Registered Successfully"})
       const result = await response.json();
       if (response.ok) {
         console.log("User Registered:", result);
+        toast({title: "User Registered Successfully"})
       } else {
         console.error("Registration Error:", result);
+        toast({title: "Registration Error: " + result.error})
       }
     } catch (error) {
       console.error("Error registering user:", error);
+      toast({title: "Some error occured"})
     }
   };
-
   const role = form.watch("role");
-
   return (
     <div className="flex justify-center m-8 p-4 rounded-lg shadow-md">
       <Tabs defaultValue="signin">

@@ -1,6 +1,9 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import { startAuthentication } from "@simplewebauthn/browser";
+
+// import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
@@ -11,13 +14,20 @@ const Page = () => {
   const session = useSession();
   const socketRef = useRef<Socket>(null);
   const watchLocation = useRef<number | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+
   const [users, setUsers] = useState<
     {
       socketId: string;
       coords: { name: string; latitude: number; longitude: number };
     }[]
   >([]);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<{
+    socketId: string;
+    coords: { name: string; latitude: number; longitude: number };
+  }>();
   const [hasAccessLocation, setHasAccessLocation] = useState(false);
   const { toast } = useToast();
 
@@ -36,11 +46,10 @@ const Page = () => {
 
     setInterval(() => {
       if (socketRef.current) {
-        console.log("fetching users");
         navigator.geolocation.getCurrentPosition(
           positionChange,
           locationResolveError
-        )
+        );
       }
     }, 1000);
     if (socketRef.current) {
@@ -53,7 +62,8 @@ const Page = () => {
       });
 
       socketRef.current.on("current-user", (data) => {
-        setCurrentUser(data);
+        console.log("current-user", data);
+        if (!currentUser) setCurrentUser(data);
       });
 
       socketRef.current.on("position-change", (data) => {
@@ -80,16 +90,16 @@ const Page = () => {
     };
   }, []);
 
-
   function positionChange(data: {
     coords: { latitude: number; longitude: number };
   }) {
     const latitude = data.coords.latitude;
     const longitude = data.coords.longitude;
+    console.log("position change", latitude, longitude, currentUser);
     if (socketRef.current && currentUser) {
       console.log("position change");
       socketRef.current.emit("position-change", {
-        socketId: currentUser.socketId,
+        socketId: currentUser?.socketId,
         coords: {
           name: session.data?.user?.name,
           latitude,
@@ -118,7 +128,6 @@ const Page = () => {
     coords: { latitude: number; longitude: number };
   }) {
     if (!socketRef.current) return;
-    console.log(data);
     setHasAccessLocation(true);
     const { latitude, longitude } = data.coords;
     socketRef.current.emit("join", {
@@ -149,24 +158,102 @@ const Page = () => {
     });
   }
 
+
+
+  async function handleFingerprintVerification() {
+    setIsVerifying(true);
+    try {
+      const optionsResponse = await fetch("/api/generate-authentication-options");
+      const options = await optionsResponse.json();
+      const authResp = await startAuthentication(options);
+      const verificationResponse = await fetch("/api/verify-authentication", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(authResp),
+      });
+      const verificationResult = await verificationResponse.json();
+
+      if (verificationResult.success) {
+        toast({
+          title: "Fingerprint Verified",
+          description: "Attendance marked present.",
+        });
+        // Mark attendance via location update
+        initUserLocation();
+        setModalOpen(false);
+
+        // *** Login the user using NextAuth credentials ***
+        // Make sure the credentials provider in your NextAuth configuration is set up
+        // to accept 'fingerprintVerified' and bypass the password check.
+        await signIn("credentials", {
+          // You may use session?.user?.email if the user is already logged in,
+          // or get the email from an input if not logged in.
+          email: session?.user?.email || "",
+          fingerprintVerified: "true",
+          callbackUrl: "/dashboard", // Redirect after sign in
+        });
+      } else {
+        toast({
+          title: "Verification Failed",
+          description: "Fingerprint did not match. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Fingerprint verification error:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred during fingerprint verification.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  }
+
+  // Handler when user clicks the "Start Attendance" button
+  function handleStartAttendance() {
+    // Open the fingerprint modal
+    setModalOpen(true);
+  }
+
+
+
+
   return (
-    <div className="p-4 h-[60vh] flex justify-center items-center flex-col">
-      <h1 className="text-xl font-bold">Start Attendance</h1>
-      <Button
-        onClick={initUserLocation}
-        className="px-10 py-5 font-semibold"
-        variant={"destructive"}
-      >
-        Start
+<div className="p-4 h-[60vh] flex flex-col justify-center items-center">
+      <h1 className="text-2xl font-bold mb-4">Start Attendance</h1>
+      <Button onClick={handleStartAttendance} className="mb-4">
+        Start Attendance
       </Button>
-      <Button
-        onClick={() => {
-          positionChange({ coords: { latitude: 0, longitude: 0 } });
-        }}
-        className="px-10 py-5 font-semibold"
-      >
-        Current
-      </Button>
+
+      {/* Fingerprint Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={() => setModalOpen(false)}
+          ></div>
+          {/* Modal Content */}
+          <div className="relative bg-white rounded shadow-lg p-8 z-10 w-80">
+            <h2 className="text-xl font-semibold mb-2">
+              Fingerprint Verification
+            </h2>
+            <p className="mb-4">Please scan your fingerprint to mark your attendance.</p>
+            <Button onClick={handleFingerprintVerification} disabled={isVerifying}>
+              {isVerifying ? "Verifying..." : "Scan Fingerprint"}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setModalOpen(false)}
+              className="mt-2"
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

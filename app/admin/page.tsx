@@ -1,13 +1,7 @@
-
 "use client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  AlertTriangle,
-  Clock,
-  MapPin,
-  Users
-} from "lucide-react";
+import { AlertTriangle, Clock, MapPin, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
@@ -25,23 +19,37 @@ const MapComponent = () => {
       coords: { latitude: number; longitude: number };
     }[]
   >([]);
+  const connectSocket = () => {
+    socketRef.current = io(ENDPOINT);
+  };
+
+  const disconnectSocket = () => {
+    if (socketRef.current) {
+      socketRef.current.emit("disconnect");
+    }
+  };
 
   const socketRef = useRef<Socket>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
 
   useEffect(() => {
-    socketRef.current = io(ENDPOINT);
-
-    socketRef.current.emit("get-data");
-    socketRef.current.on("message", (data) => {
-      setData(data);
-    });
-
+    connectSocket();
+    if (socketRef.current) {
+      socketRef.current.emit("get-data");
+      socketRef.current.on("message", (data) => {
+        console.log(data);
+        setData(data);
+      });
+      socketRef.current.on("new-user", (data) => {
+        setData((users) => [...users, data]);
+      });
+    }
     return () => {
       socketRef.current?.disconnect();
+      disconnectSocket();
     };
-  }, [setData]);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -154,10 +162,13 @@ const MapComponent = () => {
                 </div>
                 <div className="p-4 z-0">
                   {JSON.stringify(data)}
-                  <div id="map" className="z-0" style={{ width: "50vw", height: "50vh" }}></div>
+                  <div
+                    id="map"
+                    className="z-0"
+                    style={{ width: "50vw", height: "50vh" }}
+                  ></div>
                 </div>
               </div>
-                
             </div>
 
             {/* Alerts and Guards List */}

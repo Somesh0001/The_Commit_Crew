@@ -13,7 +13,6 @@ import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
 import ChartPage from "../components/DashboardComponents/ChartPage";
 import GuardsList from "../components/DashboardComponents/GuardList";
-import GuardMap from "../components/DashboardComponents/GuardMap";
 import StatsCard from "../components/DashboardComponents/StatsCard";
 
 const ENDPOINT = "http://localhost:4000";

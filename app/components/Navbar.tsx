@@ -1,9 +1,6 @@
 "use client";
 import { Bell, MapPin, Shield, Users, AlertTriangle, Clock, Star, Menu } from 'lucide-react';
 import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { GiHamburgerMenu } from "react-icons/gi";
 import styles from "./Navbar.module.css"; // Assuming CSS modules for styling
 
 const Navbar: React.FC = () => {
@@ -22,9 +19,9 @@ const Navbar: React.FC = () => {
               <button className="p-2 text-gray-400 hover:text-gray-500">
                 <Bell className="h-6 w-6" />
               </button>
-              <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
+              {/* <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
                 <span className="text-white text-sm font-medium">AD</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

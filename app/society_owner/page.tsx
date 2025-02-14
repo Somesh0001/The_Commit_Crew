@@ -34,7 +34,7 @@ const Page = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [guardToConfirm, setGuardToConfirm] = useState<string | null>(null);
 
-  const today = new Date().toISOString().split("T")[0]; 
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     const fetchSocietyOwner = async () => {
@@ -56,20 +56,17 @@ const Page = () => {
   useEffect(() => {
     const fetchGuards = async () => {
       if (ownerDetails?.society) {
-        console.log("Society is: ", ownerDetails.society);
         try {
           const res = await fetch(`/api/guard`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ society: ownerDetails.society }),
           });
 
           if (!res.ok) throw new Error("Failed to fetch guards");
           const data: Guard[] = await res.json();
 
-          // Auto-select a guard if they are already assigned for today
+          // Check if any guard is already assigned today
           const alreadyOnDuty = data.find((guard) => guard.setDuty === today);
           if (alreadyOnDuty) {
             setSelectedGuard(alreadyOnDuty._id);
@@ -92,62 +89,25 @@ const Page = () => {
   };
 
   const confirmSelection = async () => {
-    if (!guardToConfirm) return;
+    if (!guardToConfirm || !ownerDetails?.society) return;
+
     try {
       const res = await fetch(`/api/select-guard`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ guardId: guardToConfirm, society: ownerDetails?.society, setDuty: today }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guardId: guardToConfirm, society: ownerDetails.society, setDuty: today }),
       });
 
       if (!res.ok) throw new Error("Failed to select guard");
+
       const selectedGuardData = guards.find((guard) => guard._id === guardToConfirm);
       setSelectedGuard(guardToConfirm);
       setSelectedGuardDetails(selectedGuardData || null);
-      console.log("Guard selected successfully");
 
+      console.log("✅ Guard selected successfully");
       setShowModal(false);
     } catch (error) {
-      console.error("Error selecting guard:", error);
-    }
-  };
-
-  const notifyGuard = async () => {
-    if (!selectedGuardDetails) return;
-    try {
-      await fetch(`/api/notify-guard`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ guardId: selectedGuardDetails._id }),
-      });
-      alert(`Notified ${selectedGuardDetails.name} about their duty.`);
-    } catch (error) {
-      console.error("Error notifying guard:", error);
-    }
-  };
-
-  const notifyAdmin = async () => {
-    if (!selectedGuardDetails) return;
-    try {
-      await fetch(`/api/notify-admin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          guardId: selectedGuardDetails._id,
-          guardName: selectedGuardDetails.name,
-          guardPhone: selectedGuardDetails.phone,  
-          society: ownerDetails?.society
-        }),
-      });
-      alert(`Admin notified about absence of ${selectedGuardDetails.name}.`);
-    } catch (error) {
-      console.error("Error notifying admin:", error);
+      console.error("❌ Error selecting guard:", error);
     }
   };
 
@@ -157,7 +117,7 @@ const Page = () => {
         <h1 className="text-3xl font-bold text-gray-800 text-center">Society Owner Dashboard</h1>
 
         {ownerDetails && (
-          <div className="mt-6 p-6 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+          <div className="mt-6 p-6 bg-gray-100 border-l-4 border-gray-500 rounded-lg">
             <h2 className="text-lg font-semibold text-gray-700">Society Owner Details:</h2>
             <p><strong>Name:</strong> {ownerDetails.name}</p>
             <p><strong>Email:</strong> {ownerDetails.email}</p>
@@ -186,7 +146,7 @@ const Page = () => {
 
                   <button
                     className={`mt-4 w-full px-4 py-2 rounded text-white ${
-                      selectedGuard === guard._id ? "bg-green-600" : "bg-blue-600 hover:bg-blue-700"
+                      selectedGuard === guard._id ? "bg-green-600" : "bg-gray-700 hover:bg-gray-900"
                     }`}
                     onClick={() => handleGuardSelection(guard._id)}
                     disabled={selectedGuard === guard._id}
@@ -201,14 +161,20 @@ const Page = () => {
           )}
         </div>
 
-        {selectedGuard && (
-          <div className="mt-6 flex gap-4">
-            <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={notifyGuard}>
-              Notify Guard
-            </button>
-            <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onClick={notifyAdmin}>
-              Notify Admin
-            </button>
+        {showModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <h2 className="text-lg font-semibold mb-4">Confirm Selection</h2>
+              <p>Are you sure you want to assign this guard?</p>
+              <div className="mt-4 flex justify-center gap-4">
+                <button onClick={confirmSelection} className="px-4 py-2 bg-blue-600 text-white rounded">
+                  Confirm
+                </button>
+                <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-400 text-white rounded">
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

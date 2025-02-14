@@ -34,7 +34,7 @@ const Page = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [guardToConfirm, setGuardToConfirm] = useState<string | null>(null);
 
-  const today = new Date().toISOString().split("T")[0]; // Get today's date
+  const today = new Date().toISOString().split("T")[0]; 
 
   useEffect(() => {
     const fetchSocietyOwner = async () => {
@@ -141,6 +141,7 @@ const Page = () => {
         body: JSON.stringify({ 
           guardId: selectedGuardDetails._id,
           guardName: selectedGuardDetails.name,
+          guardPhone: selectedGuardDetails.phone,  
           society: ownerDetails?.society
         }),
       });

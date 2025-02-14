@@ -1,8 +1,11 @@
 import React from 'react'
+import Modal from '../components/DashboardComponents/Modal'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <Modal/>
+    </div>
   )
 }
 

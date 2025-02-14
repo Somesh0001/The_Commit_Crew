@@ -1,96 +1,81 @@
-"use client"; 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+"use client";
+import React, { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import io, { Socket } from "socket.io-client";
+const ENDPOINT = "http://localhost:4000";
+const MapComponent = () => {
+  // const socketRef = useRef<Socket>(null);
+  // const connectSocket = () => {
+  //   socketRef.current = io(ENDPOINT);
+  // };
 
-interface Event {
-  _id: string;
-  title: string;
-  author: string;
-  body: string;
-  briefSummary: string;
-  location: string;
-  imageUrls: string[];
-  createdAt: string;
-  updatedAt: string;
-}
+  // const disconnectSocket = () => {
+  //   if (socketRef.current) {
+  //     socketRef.current.emit("disconnect");
+  //   }
+  // };
 
-const Page = () => {
-  const [events, setEvents] = useState<Event[]>([]); 
+  const mapRef = useRef(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch("/api/getEvents");
-        const data = await response.json();
-        if (data.status === 201) {
-          setEvents(data.data);
-        } else {
-          console.error("Error fetching events:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
+
+    if (typeof window === "undefined") return;
+
+    // Initialize the map
+    const map = L.map("map").setView([0, 0], 2);
+    mapRef.current = map;
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    // Function to handle successful location detection
+    const onLocationFound = (e) => {
+      const radius = e.accuracy / 2;
+
+      // Add a marker at the user's location
+      const userMarker = L.marker(e.latlng, {
+        icon: L.icon({
+          iconUrl:
+            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+          iconSize: [25, 41], // Size of the marker
+          iconAnchor: [12, 41], // Position where the icon is anchored
+          popupAnchor: [1, -34], // Position where the popup opens
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+          shadowSize: [41, 41], // Size of the shadow
+        }),
+      }).addTo(map);
+      userMarker
+        .bindPopup(`You are within ${radius} meters from this point`)
+        .openPopup();
+
+      // Add a circle around the user's location with the accuracy radius
+      L.circle(e.latlng, radius).addTo(map);
     };
-    fetchEvents();
+
+    // Function to handle location detection errors
+    const onLocationError = (e) => {
+      alert(e.message);
+    };
+
+    // Attempt to locate the user
+    map.locate({ setView: true, maxZoom: 16 });
+
+    // Event listeners for location found and error
+    map.on("locationfound", onLocationFound);
+    map.on("locationerror", onLocationError);
+
+    // Cleanup function to remove event listeners
+    return () => {
+      map.off("locationfound", onLocationFound);
+      map.off("locationerror", onLocationError);
+    };
   }, []);
 
-  return (
-    <div>
-      <div className="text-3xl text-center font-bold">Admin Dashboard</div>
-      <div className="flex flex-col gap-4">
-        <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-          <Link href="/admin/createEvent">Create Event</Link>
-        </div>
-
-        <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-          <Link href="/api/auth/signout">Logout</Link>
-        </div>
-      </div>
-
-      <div>
-  <div className="text-3xl text-center font-bold">Events</div>
-  <div className="flex flex-col gap-4">
-    {events.length === 0 ? (
-      <div className="text-center text-xl font-semibold">No events available.</div>
-    ) : (
-      events.map((event) => (
-        <div
-          key={event._id}
-          className="bg-[#074799] text-white p-6 rounded-lg shadow-lg flex flex-col gap-4"
-        >
-          <div className="text-2xl font-bold">{event.title}</div>
-          <div className="text-lg">{event.body}</div>
-          <div className="text-lg italic">{event.briefSummary}</div>
-          <div className="text-md font-semibold">Author: {event.author}</div>
-
-          
-          <div className="flex space-x-4 mt-4">
-            {event.imageUrls.map((imageUrl, index) => (
-              <img
-                key={index}
-                src={imageUrl}
-                alt={`Event Image ${index}`}
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-              <Link href={`/admin/editEvent/${event._id}`}>Edit Event</Link>
-            </div>
-            <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-              <Link href={`/admin/deleteEvent/${event._id}`}>Delete Event</Link>
-            </div>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-</div>
-
-    </div>
-  );
+  return <div id="map" style={{ width: "100vw", height: "100vh" }}></div>;
 };
 
-export default Page;
+export default MapComponent;

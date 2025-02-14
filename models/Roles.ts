@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema(
     aadhar: { type: String, required: true },
     society: { type: String, default: "" },
     address: { type: String, required: true },
+    approved: {type: Boolean, required: true},
   },
   { timestamps: true }
 );

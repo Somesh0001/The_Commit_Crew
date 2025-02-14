@@ -11,7 +11,6 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface LinkType {

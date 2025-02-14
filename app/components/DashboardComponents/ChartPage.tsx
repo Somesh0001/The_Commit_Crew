@@ -1,9 +1,9 @@
 "use client";
 
 import React from 'react';
-import { RenderCustomAxisTick, RenderLineChart } from '../../../components/DashboardComponents/Chart';
+import { RenderCustomAxisTick, RenderLineChart } from './Chart';
 
-const Page = () => {
+const ChartPage = () => {
   return (
     <div>
       <h2 className="text-xl font-bold text-center mb-4">Line Chart with Custom Axis Ticks</h2>
@@ -26,4 +26,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ChartPage;

@@ -12,14 +12,13 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
+
 const formSchema = z.object({
   role: z.enum(["guard", "police", "society_owner", "field_visitor"]),
   name: z.string().min(2, "Name must be at least 2 characters").max(50),
@@ -36,13 +35,15 @@ const formSchema = z.object({
     .optional(),
   email: z.string().email(),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  approved: z.boolean().default(false),  
+  approved: z.boolean().default(false),
 });
+
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await signIn("credentials", {
@@ -51,11 +52,9 @@ const SignIn = () => {
       password,
       callbackUrl: "/profile",
     });
-
     if (res?.error) {
-      console.log("Error : " , res.error)
+      console.log("Error : ", res.error);
       setError(res.error);
-
       setTimeout(() => {
         setError(null);
       }, 5000);
@@ -63,13 +62,15 @@ const SignIn = () => {
       router.push(res.url);
     }
   };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       role: "guard",
-      approved:false ,
-    }
+      approved: false,
+    },
   });
+
   const onSubmit = async (data: any) => {
     console.log("Form submitted", data);
     try {
@@ -78,7 +79,6 @@ const SignIn = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await response.json();
       if (response.ok) {
         console.log("User Registered:", result);
@@ -89,31 +89,48 @@ const SignIn = () => {
       console.error("Error registering user:", error);
     }
   };
-  const role = form.watch("role"); 
+
+  const role = form.watch("role");
+
   return (
-    <div className="flex justify-center m-auto border-2 border-black p-4" >
+    <div className="flex justify-center m-8 p-4 rounded-lg shadow-md">
       <Tabs defaultValue="signin">
-        <TabsList className="flex space-x-4">
-          <TabsTrigger value="signin">Sign In</TabsTrigger>
-          <TabsTrigger value="login">Login</TabsTrigger>
+        <TabsList className="flex justify-center space-x-4 mb-4">
+          <TabsTrigger
+            value="signin"
+            className="px-4 py-2 border rounded hover:bg-gray-100"
+          >
+            Sign In
+          </TabsTrigger>
+          <TabsTrigger
+            value="login"
+            className="px-4 py-2 border rounded hover:bg-gray-100"
+          >
+            Login
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="signin">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4"
+            >
               {error && (
-                <div className="font-bold text-1xl text-red-500">{error}</div>
+                <div className="text-red-500 font-bold text-lg text-center">
+                  {error}
+                </div>
               )}
-
+              {/* Inline field: Role */}
               <FormField
                 control={form.control}
                 name="role"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Role</FormLabel>
-                    <FormControl>
+                  <FormItem className="flex items-center gap-4">
+                    <FormLabel className="w-32">Role</FormLabel>
+                    <FormControl className="flex-1">
                       <select
                         {...field}
-                        className="p-2 border border-gray-300 rounded-lg text-black w-full"
+                        className="p-2 border border-gray-300 rounded w-full text-black"
                       >
                         <option value="guard">Guard</option>
                         <option value="police">Police</option>
@@ -125,55 +142,57 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Inline field: Name */}
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Name</FormLabel>
+                      <FormControl className="flex-1">
                         <Input placeholder="Full Name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {/* Inline field: Age */}
                 <FormField
                   control={form.control}
                   name="age"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Age</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Age</FormLabel>
+                      <FormControl className="flex-1">
                         <Input type="number" placeholder="Age" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                {/* Inline field: Email */}
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Email</FormLabel>
+                      <FormControl className="flex-1">
                         <Input placeholder="Email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {/* Inline field: Password */}
                 <FormField
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Password</FormLabel>
+                      <FormControl className="flex-1">
                         <Input
                           type="password"
                           placeholder="Password"
@@ -184,14 +203,14 @@ const SignIn = () => {
                     </FormItem>
                   )}
                 />
-
+                {/* Inline field: Phone */}
                 <FormField
                   control={form.control}
                   name="phone"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Phone</FormLabel>
+                      <FormControl className="flex-1">
                         <Input
                           type="text"
                           placeholder="Phone Number"
@@ -202,13 +221,14 @@ const SignIn = () => {
                     </FormItem>
                   )}
                 />
+                {/* Inline field: Aadhar */}
                 <FormField
                   control={form.control}
                   name="aadhar"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Aadhar Number</FormLabel>
-                      <FormControl>
+                    <FormItem className="flex items-center gap-4">
+                      <FormLabel className="w-32">Aadhar</FormLabel>
+                      <FormControl className="flex-1">
                         <Input
                           type="text"
                           placeholder="Aadhar Number"
@@ -220,13 +240,14 @@ const SignIn = () => {
                   )}
                 />
               </div>
+              {/* Inline field: Society */}
               <FormField
                 control={form.control}
                 name="society"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Society (if applicable)</FormLabel>
-                    <FormControl>
+                  <FormItem className="flex items-center gap-4">
+                    <FormLabel className="w-32">Society</FormLabel>
+                    <FormControl className="flex-1">
                       <Input
                         type="text"
                         placeholder="Society Name"
@@ -237,28 +258,35 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
+              {/* Inline field: Address */}
               <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
+                  <FormItem className="flex items-center gap-4">
+                    <FormLabel className="w-32">Address</FormLabel>
+                    <FormControl className="flex-1">
                       <Input type="text" placeholder="Address" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div>
+              <div className="text-sm text-gray-600">
                 {role === "society_owner" && (
-                  <p> Your registration needs to be approved by police officer </p>
+                  <p>
+                    Your registration needs to be approved by a police officer.
+                  </p>
                 )}
-                { role === "guard"   && (
-                  <p> Your registration needs to be approved by police officer </p>
+                {role === "guard" && (
+                  <p>
+                    Your registration needs to be approved by a police officer.
+                  </p>
                 )}
-                 {role === "field_visitor"    && (
-                  <p> Your registration needs to be approved by society owner </p>
+                {role === "field_visitor" && (
+                  <p>
+                    Your registration needs to be approved by a society owner.
+                  </p>
                 )}
               </div>
               <Button type="submit">Register</Button>
@@ -266,19 +294,21 @@ const SignIn = () => {
           </Form>
         </TabsContent>
         <TabsContent value="login">
-          <div className="flex flex-col items-center justify-center w-full  bg-gray-50 px-4">
-            <div className="bg-white p-8 shadow-md rounded-xl ">
-              <h1 className="text-3xl font-semibold text-gray-800 text-center mb-6">
+          <div className="flex flex-col items-center justify-center w-full bg-gray-50 p-4">
+            <div className="bg-white p-8 shadow-md rounded-xl max-w-md w-full">
+              {/* Dashboard heading now using Hero's heading styles */}
+              <h1 className="hero-text1 thq-heading-1 text-center mb-6">
                 Welcome Back
               </h1>
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <div className="text-red-500 text-sm font-medium text-center">
+                  <div className="text-red-500 text-center font-medium">
                     {error}
                   </div>
                 )}
-                <div className="flex flex-col">
-                  <label htmlFor="email" className="text-gray-700 text-sm mb-1">
+                {/* Inline login field: Email */}
+                <div className="flex items-center gap-4">
+                  <label htmlFor="email" className="w-32 text-gray-700 text-sm">
                     Email
                   </label>
                   <input
@@ -286,15 +316,13 @@ const SignIn = () => {
                     type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
+                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
                     required
                   />
                 </div>
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="password"
-                    className="text-gray-700 text-sm mb-1"
-                  >
+                {/* Inline login field: Password */}
+                <div className="flex items-center gap-4">
+                  <label htmlFor="password" className="w-32 text-gray-700 text-sm">
                     Password
                   </label>
                   <input
@@ -302,7 +330,7 @@ const SignIn = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
+                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
                     required
                   />
                 </div>

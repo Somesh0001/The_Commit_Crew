@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Script from "dangerous-html/react";
 
 interface HeroProps {
   heading1: string;
@@ -35,116 +36,278 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = (props) => {
   return (
-    <div className="hero-header">
-      {/* Hero Text Section */}
-      <div className="hero-column">
-        <div className="hero-content1">
-          <h1 className="hero-text1">{props.heading1}</h1>
-          <p className="hero-text2">{props.content1}</p>
-        </div>
-        <div className="hero-actions">
-          <button className="hero-button1">{props.action1}</button>
-          <button className="hero-button2">{props.action2}</button>
-        </div>
-      </div>
-
-      {/* Image Animation Section */}
-      <div className="hero-content2">
-        <div className="hero-row-container">
-          <div className="hero-image-group">
-            {[props.image1Src, props.image2Src, props.image3Src, props.image4Src, props.image5Src, props.image6Src].map(
-              (src, index) => (
-                <img key={index} src={src} alt={`Image ${index + 1}`} className="hero-image" />
-              )
-            )}
+    <>
+      <div className="hero-header78">
+        <div className="hero-column thq-section-padding thq-section-max-width">
+          <div className="hero-content1">
+            <h1 className="hero-text1 thq-heading-1">{props.heading1}</h1>
+            <p className="hero-text2 thq-body-large">{props.content1}</p>
           </div>
-          <div className="hero-image-group">
-            {[props.image7Src, props.image8Src, props.image9Src, props.image10Src, props.image11Src, props.image12Src].map(
-              (src, index) => (
-                <img key={index} src={src} alt={`Image ${index + 7}`} className="hero-image" />
-              )
-            )}
+          <div className="hero-actions">
+            <button className="thq-button-filled hero-button1">
+              <span className="thq-body-small">{props.action1}</span>
+            </button>
+            <button className="thq-button-outline hero-button2">
+              <span className="thq-body-small">{props.action2}</span>
+            </button>
           </div>
         </div>
-      </div>
+        <div className="hero-content2">
+          {/* First Animated Row Container */}
+          <div className="hero-row-container1 thq-animated-group-container-horizontal thq-mask-image-horizontal">
+            <div className="thq-animated-group-horizontal">
+              <img
+                alt={props.image1Alt}
+                src={props.image1Src}
+                className="hero-placeholder-image10 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image2Alt}
+                src={props.image2Src}
+                className="hero-placeholder-image11 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image3Alt}
+                src={props.image3Src}
+                className="hero-placeholder-image12 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image4Alt}
+                src={props.image4Src}
+                className="hero-placeholder-image13 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image5Alt}
+                src={props.image5Src}
+                className="hero-placeholder-image14 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image6Alt}
+                src={props.image6Src}
+                className="hero-placeholder-image15 thq-img-scale thq-img-ratio-1-1"
+              />
+            </div>
+            <div className="thq-animated-group-horizontal">
+              <img
+                alt={props.image1Alt}
+                src={props.image1Src}
+                className="hero-placeholder-image16 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image2Alt}
+                src={props.image2Src}
+                className="hero-placeholder-image17 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image3Alt}
+                src={props.image3Src}
+                className="hero-placeholder-image18 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image4Alt}
+                src={props.image4Src}
+                className="hero-placeholder-image19 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image5Alt}
+                src={props.image5Src}
+                className="hero-placeholder-image20 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt="Hero Image"
+                src="https://images.unsplash.com/photo-1534312527009-56c7016453e6?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDIxfHxhYnN0cmFjdHxlbnwwfHx8fDE3MTA4NzA5MzB8MA&amp;ixlib=rb-4.0.3&amp;w=1500"
+                className="hero-placeholder-image21 thq-img-scale thq-img-ratio-1-1"
+              />
+            </div>
+          </div>
 
-      {/* Inline Animation Styles */}
+          {/* Second Animated Row Container */}
+          <div className="hero-row-container2 thq-animated-group-container-horizontal thq-mask-image-horizontal">
+            <div className="thq-animated-group-horizontal-reverse">
+              <img
+                alt={props.image7Alt}
+                src={props.image7Src}
+                className="hero-placeholder-image22 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image8Alt}
+                src={props.image8Src}
+                className="hero-placeholder-image23 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image9Alt}
+                src={props.image9Src}
+                className="hero-placeholder-image24 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image10Alt}
+                src={props.image10Src}
+                className="hero-placeholder-image25 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image11Alt}
+                src={props.image11Src}
+                className="hero-placeholder-image26 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image12Alt}
+                src={props.image12Src}
+                className="hero-placeholder-image27 thq-img-scale thq-img-ratio-1-1"
+              />
+            </div>
+            <div className="thq-animated-group-horizontal-reverse">
+              <img
+                alt={props.image7Alt}
+                src={props.image7Src}
+                className="hero-placeholder-image28 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image8Alt}
+                src={props.image8Src}
+                className="hero-placeholder-image29 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image9Alt}
+                src={props.image9Src}
+                className="hero-placeholder-image30 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image10Alt}
+                src={props.image10Src}
+                className="hero-placeholder-image31 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt={props.image11Alt}
+                src={props.image11Src}
+                className="hero-placeholder-image32 thq-img-scale thq-img-ratio-1-1"
+              />
+              <img
+                alt="Hero Image"
+                src="https://images.unsplash.com/photo-1568214379698-8aeb8c6c6ac8?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDEyfHxncmFmaWN8ZW58MHx8fHwxNzE1Nzk0OTk5fDA&amp;ixlib=rb-4.0.3&amp;w=1500"
+                className="hero-placeholder-image33 thq-img-scale thq-img-ratio-1-1"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="hero-container2">
+          <Script
+            html={
+              `<style>
+                @keyframes scroll-x {
+                  from { transform: translateX(0); }
+                  to { transform: translateX(calc(-100% - 16px)); }
+                }
+                @keyframes scroll-y {
+                  from { transform: translateY(0); }
+                  to { transform: translateY(calc(-100% - 16px)); }
+                }
+              </style>`
+            }
+          />
+        </div>
+      </div>
       <style jsx>{`
-        .hero-header {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          gap: 20px;
+        .hero-header78 {
+          gap: var(--dl-space-space-threeunits);
           width: 100%;
-          padding: 40px;
+          height: auto;
+          display: flex;
+          overflow: hidden;
+          position: relative;
+          align-items: center;
+          flex-shrink: 0;
+          flex-direction: column;
         }
         .hero-column {
-          max-width: 800px;
+          gap: var(--dl-space-space-oneandhalfunits);
+          width: auto;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          padding-bottom: var(--dl-space-space-unit);
+        }
+        .hero-content1 {
+          gap: var(--dl-space-space-oneandhalfunits);
+          display: flex;
+          align-self: stretch;
+          align-items: center;
+          flex-direction: column;
         }
         .hero-text1 {
-          font-size: 2.5rem;
-          font-weight: bold;
+          text-align: center;
         }
         .hero-text2 {
-          font-size: 1.2rem;
-          color: #555;
+          text-align: center;
         }
         .hero-actions {
+          gap: var(--dl-space-space-unit);
           display: flex;
-          gap: 15px;
-          margin-top: 20px;
-        }
-        .hero-button1,
-        .hero-button2 {
-          padding: 12px 20px;
-          border: none;
-          cursor: pointer;
-          font-size: 1rem;
-          border-radius: 5px;
-        }
-        .hero-button1 {
-          background-color: #0070f3;
-          color: white;
-        }
-        .hero-button2 {
-          background-color: transparent;
-          border: 2px solid #0070f3;
-          color: #0070f3;
+          align-items: flex-start;
+          padding-top: var(--dl-space-space-unit);
         }
         .hero-content2 {
+          gap: var(--dl-space-space-oneandhalfunits);
+          width: 100%;
           display: flex;
-          justify-content: center;
-          overflow: hidden;
+          position: relative;
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .hero-row-container1,
+        .hero-row-container2 {
           width: 100%;
         }
-        .hero-row-container {
-          display: flex;
-          gap: 20px;
-          animation: scroll-x 10s linear infinite;
+        .hero-placeholder-image10,
+        .hero-placeholder-image11,
+        .hero-placeholder-image12,
+        .hero-placeholder-image13,
+        .hero-placeholder-image14,
+        .hero-placeholder-image15,
+        .hero-placeholder-image16,
+        .hero-placeholder-image17,
+        .hero-placeholder-image18,
+        .hero-placeholder-image19,
+        .hero-placeholder-image20,
+        .hero-placeholder-image21,
+        .hero-placeholder-image22,
+        .hero-placeholder-image23,
+        .hero-placeholder-image24,
+        .hero-placeholder-image25,
+        .hero-placeholder-image26,
+        .hero-placeholder-image27,
+        .hero-placeholder-image28,
+        .hero-placeholder-image29,
+        .hero-placeholder-image30,
+        .hero-placeholder-image31,
+        .hero-placeholder-image32,
+        .hero-placeholder-image33 {
+          width: 400px;
+          height: 400px;
         }
-        .hero-image-group {
-          display: flex;
-          gap: 15px;
+        .hero-container2 {
+          display: contents;
         }
-        .hero-image {
-          width: 200px;
-          height: 200px;
-          object-fit: cover;
-          border-radius: 10px;
-        }
-        @keyframes scroll-x {
-          from {
-            transform: translateX(0);
+        @media (max-width: 767px) {
+          .hero-content2 {
+            width: 100%;
           }
-          to {
-            transform: translateX(-100%);
+        }
+        @media (max-width: 479px) {
+          .hero-actions {
+            width: 100%;
+            flex-direction: column;
+          }
+          .hero-button1 {
+            width: 100%;
+          }
+          .hero-button2 {
+            width: 100%;
           }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
 export default Hero;
+

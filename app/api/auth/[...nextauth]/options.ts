@@ -21,11 +21,6 @@ export const options: NextAuthOptions = {
       credentials: {
         email: { label: "Email:", type: "text", placeholder: "your-cool-username" },
         password: { label: "Password:", type: "password", placeholder: "your-awesome-password" },
-       
-         fingerprintVerified: {
-          label: "Fingerprint Verified",
-          type: "hidden",
-        },
       },
       async authorize(credentials) {
         await connectDB();

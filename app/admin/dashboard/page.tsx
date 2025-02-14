@@ -4,6 +4,7 @@ import StatsCard from '@/app/components/DashboardComponents/StatsCard';
 import GuardMap from '@/app/components/DashboardComponents/GuardMap';
 import AlertsList from '@/app/components/DashboardComponents/AlertsList';
 import GuardsList from '@/app/components/DashboardComponents/GuardList';
+
 const page = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50">
@@ -37,6 +38,7 @@ const page = () => {
             icon={<Users className="h-6 w-6 text-indigo-600" />}
             trend="+2 from yesterday"
           />
+          
           <StatsCard
             title="Active Zones"
             value="8"

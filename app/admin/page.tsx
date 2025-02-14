@@ -1,96 +1,81 @@
-"use client"; 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React from 'react';
+import { Bell, MapPin, Shield, Users, AlertTriangle, Clock, Star, Menu } from 'lucide-react';
+import StatsCard from '../components/DashboardComponents/StatsCard';
+import GuardMap from '../components/DashboardComponents/GuardMap';
+import AlertsList from '../components/DashboardComponents/AlertsList';
+import GuardsList from '../components/DashboardComponents/GuardList';
+import ChartPage from '../components/DashboardComponents/ChartPage';
+const page = () => {
+  return (
+    <div className="w-full h-screen overflow-auto">
 
-interface Event {
-  _id: string;
-  title: string;
-  author: string;
-  body: string;
-  briefSummary: string;
-  location: string;
-  imageUrls: string[];
-  createdAt: string;
-  updatedAt: string;
+    
+
+      {/* Main Content */}
+      <main className="  px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          <StatsCard
+            title="Active Guards"
+            value="24"
+            icon={<Users className="h-6 w-6 text-indigo-600" />}
+            trend="+2 from yesterday"
+          />
+          <StatsCard
+            title="Active Zones"
+            value="8"
+            icon={<MapPin className="h-6 w-6 text-green-600" />}
+            trend="All zones covered"
+          />
+          <StatsCard
+            title="Open Incidents"
+            value="3"
+            icon={<AlertTriangle className="h-6 w-6 text-red-600" />}
+            trend="2 high priority"
+          />
+          <StatsCard
+            title="Avg. Response Time"
+            value="4.2m"
+            icon={<Clock className="h-6 w-6 text-orange-600" />}
+            trend="Within SLA"
+          />
+        </div>
+
+        {/* Map and Lists Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Map Section */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium text-gray-900">Live Guard Locations</h2>
+              </div>
+              <div className="p-4">
+                <GuardMap />
+              </div>
+            </div>
+          </div>
+
+          {/* Alerts and Guards List */}
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium text-gray-900">Recent Alerts</h2>
+              </div>
+              <AlertsList />
+            </div>
+
+            <div className="bg-white rounded-lg shadow">
+              <div className="p-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium text-gray-900">On-Duty Guards</h2>
+              </div>
+              <GuardsList />
+            </div>
+          </div>
+        </div>
+      </main>
+      <ChartPage/> 
+    </div>
+  )
 }
 
-const Page = () => {
-  const [events, setEvents] = useState<Event[]>([]); 
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch("/api/getEvents");
-        const data = await response.json();
-        if (data.status === 201) {
-          setEvents(data.data);
-        } else {
-          console.error("Error fetching events:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-    fetchEvents();
-  }, []);
-
-  return (
-    <div>
-      <div className="text-3xl text-center font-bold">Admin Dashboard</div>
-      <div className="flex flex-col gap-4">
-        <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-          <Link href="/admin/createEvent">Create Event</Link>
-        </div>
-
-        <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-          <Link href="/api/auth/signout">Logout</Link>
-        </div>
-      </div>
-
-      <div>
-  <div className="text-3xl text-center font-bold">Events</div>
-  <div className="flex flex-col gap-4">
-    {events.length === 0 ? (
-      <div className="text-center text-xl font-semibold">No events available.</div>
-    ) : (
-      events.map((event) => (
-        <div
-          key={event._id}
-          className="bg-[#074799] text-white p-6 rounded-lg shadow-lg flex flex-col gap-4"
-        >
-          <div className="text-2xl font-bold">{event.title}</div>
-          <div className="text-lg">{event.body}</div>
-          <div className="text-lg italic">{event.briefSummary}</div>
-          <div className="text-md font-semibold">Author: {event.author}</div>
-
-          
-          <div className="flex space-x-4 mt-4">
-            {event.imageUrls.map((imageUrl, index) => (
-              <img
-                key={index}
-                src={imageUrl}
-                alt={`Event Image ${index}`}
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-              <Link href={`/admin/editEvent/${event._id}`}>Edit Event</Link>
-            </div>
-            <div className="text-center font-bold text-2xl flex justify-center items-center bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit">
-              <Link href={`/admin/deleteEvent/${event._id}`}>Delete Event</Link>
-            </div>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-</div>
-
-    </div>
-  );
-};
-
-export default Page;
+export default page;

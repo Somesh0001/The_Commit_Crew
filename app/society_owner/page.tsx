@@ -34,7 +34,8 @@ const Page = () => {
     useState<Guard | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [guardToConfirm, setGuardToConfirm] = useState<string | null>(null);
-
+  const [showNotifyModal, setShowNotifyModal] = useState(false);
+  const [message, setMessage] = useState("");
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
@@ -66,9 +67,11 @@ const Page = () => {
           if (!res.ok) throw new Error("Failed to fetch guards");
           let data: Guard[] = await res.json();
           data = data.sort((a, b) => {
-            if (!a.setDuty) return -1; 
+            if (!a.setDuty) return -1;
             if (!b.setDuty) return 1;
-            return new Date(a.setDuty).getTime() - new Date(b.setDuty).getTime(); 
+            return (
+              new Date(a.setDuty).getTime() - new Date(b.setDuty).getTime()
+            );
           });
           const alreadyOnDuty = data.find((guard) => guard.setDuty === today);
           if (alreadyOnDuty) {
@@ -87,6 +90,66 @@ const Page = () => {
     setGuardToConfirm(guardId);
     setShowModal(true);
   };
+
+  const handleNotify = () => {
+    if (!selectedGuardDetails) {
+      alert("No guard selected to notify.");
+      return;
+    }
+    setShowNotifyModal(true);
+  };
+
+  const sendNotification = async (recipient: "admin" | "guard") => {
+    if (!message.trim()) {
+      alert("Please enter a message before notifying.");
+      return;
+    }
+
+    if (!selectedGuardDetails) {
+      alert("No guard selected to notify.");
+      return;
+    }
+
+    try {
+      let apiEndpoint = "";
+      let requestBody = {};
+
+      if (recipient === "admin") {
+        apiEndpoint = "/api/notify-admin";
+        requestBody = {
+          guardId: selectedGuardDetails._id,
+          guardName: selectedGuardDetails.name,
+          guardPhone: selectedGuardDetails.phone,
+          society: ownerDetails?.society,
+        };
+      } else {
+        apiEndpoint = "/api/notify-guard";
+        requestBody = { guardId: selectedGuardDetails._id };
+      }
+
+      const res = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send notification");
+      }
+
+      alert(
+        `✅ ${recipient === "admin" ? "Admin" : "Guard"} notified successfully!`
+      );
+      setShowNotifyModal(false);
+      setMessage("");
+    } catch (error: any) {
+      console.error("❌ Error notifying:", error);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
   const confirmSelection = async () => {
     if (!guardToConfirm || !ownerDetails?.society) return;
     try {
@@ -113,7 +176,7 @@ const Page = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
+    <div className="h-auto w-screen bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
       <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Society Owner Dashboard
@@ -219,6 +282,51 @@ const Page = () => {
           </div>
         )}
       </div>
+      <div className="mt-6 flex gap-4">
+        <button
+          onClick={handleNotify}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Notify
+        </button>
+      </div>
+      {showNotifyModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+            <h2 className="text-lg font-semibold mb-4">Send Notification</h2>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Enter your message..."
+              className="w-full p-2 border rounded-lg mb-4"
+              rows={3}
+            ></textarea>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => sendNotification("admin")}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Notify Admin
+              </button>
+
+              <button
+                onClick={() => sendNotification("guard")}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Notify Guard
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowNotifyModal(false)}
+              className="mt-4 px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

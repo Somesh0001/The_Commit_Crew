@@ -23,7 +23,6 @@ export const options: NextAuthOptions = {
                 password: { label: "Password:", type: "password", placeholder: "your-awesome-password" }
             },
             async authorize(credentials) {
-             
                 await connectDB();
                 const user = await User.findOne({ email: credentials?.email });
 
@@ -31,7 +30,10 @@ export const options: NextAuthOptions = {
                     throw new Error("User not found. Please register first.");
                 }
 
-               
+                if (!user.approved) {
+                    throw new Error("Your account is not approved yet. Please contact admin.");
+                }
+
                 if (credentials?.password !== user.password) {
                     throw new Error("Invalid credentials");
                 }
@@ -62,4 +64,4 @@ export const options: NextAuthOptions = {
         signIn: "/signin",
         signOut: "/signout"
     }
-};
+};  

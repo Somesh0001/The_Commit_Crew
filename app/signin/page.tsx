@@ -36,6 +36,7 @@ const formSchema = z.object({
     .optional(),
   email: z.string().email(),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  approved: z.boolean().default(false),  
 });
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -52,13 +53,22 @@ const SignIn = () => {
     });
 
     if (res?.error) {
-      setError("Invalid username or password");
+      console.log("Error : " , res.error)
+      setError(res.error);
+
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     } else if (res?.url) {
       router.push(res.url);
     }
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      role: "guard",
+      approved:false ,
+    }
   });
   const onSubmit = async (data: any) => {
     console.log("Form submitted", data);
@@ -79,6 +89,7 @@ const SignIn = () => {
       console.error("Error registering user:", error);
     }
   };
+  const role = form.watch("role"); 
   return (
     <div className="flex justify-center">
       <Tabs defaultValue="signin">
@@ -239,6 +250,17 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
+              <div>
+                {role === "society_owner" && (
+                  <p> Your registration needs to be approved by police officer </p>
+                )}
+                { role === "guard"   && (
+                  <p> Your registration needs to be approved by police officer </p>
+                )}
+                 {role === "field_visitor"    && (
+                  <p> Your registration needs to be approved by society owner </p>
+                )}
+              </div>
               <Button type="submit">Register</Button>
             </form>
           </Form>

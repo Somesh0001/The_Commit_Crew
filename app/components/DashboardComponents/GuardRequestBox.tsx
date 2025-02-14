@@ -37,8 +37,8 @@ const GuardRequestBox = () => {
         {guards.length === 0 ? (
           <p className="text-gray-500">No unapproved guards found.</p>
         ) : (
-          guards.map((guard) => (
-            <li  className="flex justify-between bg-slate-100 p-2 rounded-md">
+          guards.map((guard,i) => (
+            <li key={i}  className="flex justify-between bg-slate-100 p-2 rounded-md">
               <div>{guard.name}</div>
               <Modal guard={guard} />
             </li>

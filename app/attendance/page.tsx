@@ -87,9 +87,8 @@ const Page = () => {
     const latitude = data.coords.latitude;
     const longitude = data.coords.longitude;
     if (socketRef.current && currentUser) {
-      console.log("position change");
       socketRef.current.emit("position-change", {
-        socketId: currentUser.socketId,
+        socketId: currentUser?.socketId,
         coords: {
           name: session.data?.user?.name,
           latitude,

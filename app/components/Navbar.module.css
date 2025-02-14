@@ -1,0 +1,100 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .logoContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logoWrapper img {
+    height: 50px;
+    width: auto;
+  }
+  
+  .heading {
+    margin-left: 10px;
+  }
+  
+  .mainHeading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .subHeading {
+    font-size: 1rem;
+    color: black;
+  }
+  .menuLinks 
+  {
+    width: 60%;
+  }
+  
+  .menuLinks ul {
+    display: flex; 
+    justify-content: space-between; 
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+    width: 100%; 
+  }
+  
+  .menuLinks ul li {
+    flex: 1; 
+    text-align: center; 
+  }
+  
+  .menuLinks ul li a {
+    text-decoration: none; 
+    font-size: 1.2rem;
+    color: black;
+    transition: color 0.3s ease; 
+  }
+  
+  .menuLinks ul li a:hover {
+    color: #ffffff; 
+    background-color: #007acc;
+    padding: 1px;
+  }
+  
+  
+  .hamburgerMenu {
+    display: none;
+  }
+  
+  .hamburgerIcon {
+    font-size: 2rem;
+    cursor: pointer;
+    color: black;
+  }
+  
+  .show {
+    display: flex !important;
+  }
+  
+  @media (max-width: 768px) {
+    .menuLinks {
+      display: none;
+      flex-direction: column;
+      background-color: white;
+      position: absolute;
+      top: 80px;
+      right: 0;
+      width: 100%;
+      padding: 1rem 0;
+      border: 1px solid black;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+  
+    .hamburgerMenu {
+      display: block;
+    }
+  }
+  

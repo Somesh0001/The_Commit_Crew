@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
     aadhar: { type: String, required: true },
     society: { type: String, default: "" },
     address: { type: String, required: true },
-    approved: { type: Boolean, default:"false", required: true },
+    approved: { type: Boolean, required: true },
     setDuty: { type: String, default: null }, 
   },
   { timestamps: true }

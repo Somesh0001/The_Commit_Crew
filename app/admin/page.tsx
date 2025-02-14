@@ -38,6 +38,7 @@ const MapComponent = () => {
     if (socketRef.current) {
       socketRef.current.emit("get-data");
       socketRef.current.on("message", (data) => {
+        console.log(data);
         setData(data);
       });
       socketRef.current.on("new-user", (data) => {

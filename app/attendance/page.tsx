@@ -24,7 +24,10 @@ const Page = () => {
       coords: { name: string; latitude: number; longitude: number };
     }[]
   >([]);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<{
+    socketId: string;
+    coords: { name: string; latitude: number; longitude: number };
+  }>();
   const [hasAccessLocation, setHasAccessLocation] = useState(false);
   const { toast } = useToast();
 
@@ -43,11 +46,10 @@ const Page = () => {
 
     setInterval(() => {
       if (socketRef.current) {
-        console.log("fetching users");
         navigator.geolocation.getCurrentPosition(
           positionChange,
           locationResolveError
-        )
+        );
       }
     }, 1000);
     if (socketRef.current) {
@@ -60,7 +62,8 @@ const Page = () => {
       });
 
       socketRef.current.on("current-user", (data) => {
-        setCurrentUser(data);
+        console.log("current-user", data);
+        if (!currentUser) setCurrentUser(data);
       });
 
       socketRef.current.on("position-change", (data) => {
@@ -87,13 +90,14 @@ const Page = () => {
     };
   }, []);
 
-
   function positionChange(data: {
     coords: { latitude: number; longitude: number };
   }) {
     const latitude = data.coords.latitude;
     const longitude = data.coords.longitude;
+    console.log("position change", latitude, longitude, currentUser);
     if (socketRef.current && currentUser) {
+      console.log("position change");
       socketRef.current.emit("position-change", {
         socketId: currentUser?.socketId,
         coords: {
@@ -124,7 +128,6 @@ const Page = () => {
     coords: { latitude: number; longitude: number };
   }) {
     if (!socketRef.current) return;
-    console.log(data);
     setHasAccessLocation(true);
     const { latitude, longitude } = data.coords;
     socketRef.current.emit("join", {
@@ -175,9 +178,20 @@ const Page = () => {
           title: "Fingerprint Verified",
           description: "Attendance marked present.",
         });
-        // Once fingerprint is verified, mark attendance (e.g., using location)
+        // Mark attendance via location update
         initUserLocation();
         setModalOpen(false);
+
+        // *** Login the user using NextAuth credentials ***
+        // Make sure the credentials provider in your NextAuth configuration is set up
+        // to accept 'fingerprintVerified' and bypass the password check.
+        await signIn("credentials", {
+          // You may use session?.user?.email if the user is already logged in,
+          // or get the email from an input if not logged in.
+          email: session?.user?.email || "",
+          fingerprintVerified: "true",
+          callbackUrl: "/dashboard", // Redirect after sign in
+        });
       } else {
         toast({
           title: "Verification Failed",

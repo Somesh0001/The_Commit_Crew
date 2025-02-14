@@ -4,7 +4,7 @@ import io, { Socket } from "socket.io-client";
 // import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-const ENDPOINT = "https://mainserver-e972.onrender.com";
+const ENDPOINT = "http://localhost:4000";
 const Page = () => {
   const socketRef = useRef<Socket>(null);
   const watchLocation = useRef<number | null>(null);

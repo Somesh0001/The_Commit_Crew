@@ -5,6 +5,7 @@ import AuthProvider from "./context/AuthProvider";
 
 
 import DashboardSidebar from "./components/DashboardComponents/DashboardSidebar";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex justify-center items-start w-full h-full">
             <DashboardSidebar child={children} />
           </main>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

@@ -16,7 +16,7 @@ const GuardRequestBox = () => {
   ];
 
   return (
-    <div className="max-w-4xl h-[50vh] rounded-md overflow-scroll shadow-lg  mt-3">
+    <div className="max-w-4xl h-[50vh] rounded-md overflow-scroll shadow-lg  mt-4">
       <div className="flex justify-between items-center  p-4 bg-green-200 text-white rounded-t-md">
         <h3 className="text-lg font-semibold text-black">Guard Requests</h3>
       </div>

@@ -49,7 +49,7 @@ const SignIn = () => {
       redirect: false,
       email,
       password,
-      callbackUrl: "/admin",
+      callbackUrl: "/profile",
     });
 
     if (res?.error) {

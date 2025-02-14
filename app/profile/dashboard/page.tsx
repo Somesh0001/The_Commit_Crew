@@ -1,9 +1,9 @@
 import React from 'react'
 import { Bell, MapPin, Shield, Users, AlertTriangle, Clock, Star, Menu } from 'lucide-react';
-import StatsCard from '@/app/components/DashboardComponents/StatsCard';
-import GuardMap from '@/app/components/DashboardComponents/GuardMap';
-import AlertsList from '@/app/components/DashboardComponents/AlertsList';
-import GuardsList from '@/app/components/DashboardComponents/GuardList';
+import StatsCard from '../../components/DashboardComponents/StatsCard'; 
+import GuardMap from '../../components/DashboardComponents/GuardMap';
+import AlertsList from '../../components/DashboardComponents/AlertsList';
+import GuardsList from '../../components/DashboardComponents/GuardList';
 const AdminDashboard = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50">

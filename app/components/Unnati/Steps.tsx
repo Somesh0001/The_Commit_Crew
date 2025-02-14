@@ -1,67 +1,215 @@
-'use client';
-
 import React from 'react';
-// import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
-type StepsProps = {
-  step1Title?: string;
+interface StepsProps {
   step1Description?: string;
+  step3Description?: string;
   step2Title?: string;
   step2Description?: string;
+  step1Title?: string;
   step3Title?: string;
-  step3Description?: string;
-  step4Title?: string;
   step4Description?: string;
-};
+  step4Title?: string;
+}
 
 const Steps: React.FC<StepsProps> = ({
-  step1Title = 'Create Account',
   step1Description = 'Sign up for an account to access the platform.',
+  step3Description = 'Define virtual boundaries and receive alerts when guards breach them.',
   step2Title = 'Add Security Guards',
   step2Description = 'Input details and assign roles for security personnel.',
+  step1Title = 'Create Account',
   step3Title = 'Set Up Geo-Fencing',
-  step3Description = 'Define virtual boundaries and receive alerts when guards breach them.',
-  step4Title = 'Monitor in Real Time',
   step4Description = 'Track guard locations, attendance, and incidents live on the dashboard.',
+  step4Title = 'Monitor in Real Time',
 }) => {
   return (
-    <div className="steps-container1 thq-section-padding">
-      <div className="steps-max-width thq-section-max-width">
-        <div className="steps-container2 thq-grid-2">
-          <div className="steps-section-header">
-            <h2 className="thq-heading-2">Discover the Power of Our Products</h2>
-            <p className="thq-body-large">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse varius enim in eros elementum tristique. Duis cursus,
-              mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam
-              libero vitae erat.
-            </p>
-            <div className="steps-actions">
-              <button className="thq-button-animated thq-button-filled steps-button">
-                <span className="thq-body-small">Main action</span>
-              </button>
+    <>
+      <div className="steps-container1 thq-section-padding">
+        <div className="steps-max-width thq-section-max-width">
+          <div className="steps-container2 thq-grid-2">
+            <div className="steps-section-header">
+              <h2 className="thq-heading-2">
+                Discover the Power of Our Products
+              </h2>
+              <p className="thq-body-large">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Suspendisse varius enim in eros elementum tristique. Duis
+                cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
+                commodo diam libero vitae erat.
+              </p>
+              <div className="steps-actions">
+                <button className="thq-button-animated thq-button-filled steps-button">
+                  <span className="thq-body-small">Main action</span>
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="steps-container3">
-            {[{ title: step1Title, description: step1Description, num: '01' },
-              { title: step2Title, description: step2Description, num: '02' },
-              { title: step3Title, description: step3Description, num: '03' },
-              { title: step4Title, description: step4Description, num: '04' }]
-              .map((step, index) => (
-                <div
-                  key={index}
-                  className={`steps-container${index + 4} thq-card`}
-                  style={{ transform: index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)' }}
-                >
-                  <h2 className="thq-heading-2">{step.title}</h2>
-                  <span className="steps-text thq-body-small">{step.description}</span>
-                  <label className="steps-number thq-heading-3">{step.num}</label>
-                </div>
-              ))}
+            <div className="steps-container3">
+              <div className="steps-container4 thq-card">
+                <h2 className="thq-heading-2">{step1Title}</h2>
+                <span className="steps-text14 thq-body-small">
+                  {step1Description}
+                </span>
+                <label className="steps-text15 thq-heading-3">01</label>
+              </div>
+              <div className="steps-container5 thq-card">
+                <h2 className="thq-heading-2">{step2Title}</h2>
+                <span className="steps-text17 thq-body-small">
+                  {step2Description}
+                </span>
+                <label className="steps-text18 thq-heading-3">02</label>
+              </div>
+              <div className="steps-container6 thq-card">
+                <h2 className="thq-heading-2">{step3Title}</h2>
+                <span className="steps-text20 thq-body-small">
+                  {step3Description}
+                </span>
+                <label className="steps-text21 thq-heading-3">03</label>
+              </div>
+              <div className="steps-container7 thq-card">
+                <h2 className="thq-heading-2">{step4Title}</h2>
+                <span className="steps-text23 thq-body-small">
+                  {step4Description}
+                </span>
+                <label className="steps-text24 thq-heading-3">04</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <style jsx>{`
+        .steps-container1 {
+          width: 100%;
+          display: flex;
+          position: relative;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .steps-max-width {
+          gap: var(--dl-space-space-fourunits);
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          flex-direction: row;
+        }
+        .steps-container2 {
+          align-items: start;
+        }
+        .steps-section-header {
+          gap: var(--dl-space-space-oneandhalfunits);
+          top: 10%;
+          display: flex;
+          position: sticky;
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .steps-actions {
+          gap: var(--dl-space-space-unit);
+          display: flex;
+          align-items: flex-start;
+        }
+        .steps-container3 {
+          grid-area: span 1 / span 1 / span 1 / span 1;
+        }
+        .steps-container4 {
+          top: 10%;
+          position: sticky;
+          transform: rotate(-2deg);
+          margin-bottom: var(--dl-space-space-twounits);
+          background-color: var(--dl-color-theme-accent1);
+        }
+        .steps-text14 {
+          text-align: center;
+        }
+        .steps-text15 {
+          top: var(--dl-space-space-unit);
+          right: var(--dl-space-space-unit);
+          position: absolute;
+          font-size: 40px;
+          font-style: normal;
+          font-weight: 700;
+        }
+        .steps-container5 {
+          top: 10%;
+          position: sticky;
+          transform: rotate(2deg);
+          margin-bottom: var(--dl-space-space-twounits);
+          background-color: var(--dl-color-theme-accent2);
+        }
+        .steps-text17 {
+          text-align: center;
+        }
+        .steps-text18 {
+          top: var(--dl-space-space-unit);
+          right: var(--dl-space-space-unit);
+          position: absolute;
+          font-size: 40px;
+          font-style: normal;
+          font-weight: 700;
+        }
+        .steps-container6 {
+          top: 10%;
+          position: sticky;
+          transform: rotate(-2deg);
+          margin-bottom: var(--dl-space-space-twounits);
+          background-color: var(--dl-color-theme-accent1);
+        }
+        .steps-text20 {
+          text-align: center;
+        }
+        .steps-text21 {
+          top: var(--dl-space-space-unit);
+          right: var(--dl-space-space-unit);
+          position: absolute;
+          font-size: 40px;
+          font-style: normal;
+          font-weight: 700;
+        }
+        .steps-container7 {
+          top: 10%;
+          position: sticky;
+          transform: rotate(2deg);
+          background-color: var(--dl-color-theme-accent2);
+        }
+        .steps-text23 {
+          text-align: center;
+        }
+        .steps-text24 {
+          top: var(--dl-space-space-unit);
+          right: var(--dl-space-space-unit);
+          position: absolute;
+          font-size: 40px;
+          font-style: normal;
+          font-weight: 700;
+        }
+        @media (max-width: 991px) {
+          .steps-max-width {
+            flex-direction: column;
+          }
+        }
+        @media (max-width: 767px) {
+          .steps-section-header {
+            position: static;
+            margin-bottom: var(--dl-space-space-twounits);
+          }
+          .steps-actions {
+            width: 100%;
+            align-self: flex-start;
+          }
+          .steps-container4,
+          .steps-container5,
+          .steps-container6,
+          .steps-container7 {
+            width: 100%;
+          }
+        }
+        @media (max-width: 479px) {
+          .steps-button {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </>
   );
 };
 

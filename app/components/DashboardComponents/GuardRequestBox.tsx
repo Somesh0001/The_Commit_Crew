@@ -2,6 +2,18 @@ import React from "react";
 import Modal from "./Modal";
 
 const GuardRequestBox = () => {
+    const fetchUnapprovedGuards = async () => {
+        const response = await fetch("/api/unapprovedGuards", {
+          method: "POST",
+          body: JSON.stringify({ society: "Gokuldham" }),
+          headers: { "Content-Type": "application/json" },
+        });
+      
+        const data = await response.json();
+        console.log(data);
+      };
+      fetchUnapprovedGuards();
+
   const guardData = [
     { id: 1, name: "Rajesh Kumar", place: "Main Gate" },
     { id: 2, name: "Amit Singh", place: "Lobby" },

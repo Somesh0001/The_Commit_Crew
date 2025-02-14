@@ -1,7 +1,7 @@
 "use client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { AlertTriangle, Clock, MapPin, Users } from "lucide-react";
+import {  MapPin, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
@@ -23,6 +23,7 @@ const MapComponent = () => {
     socketRef.current = io(ENDPOINT);
   };
 
+
   const disconnectSocket = () => {
     if (socketRef.current) {
       socketRef.current.emit("disconnect");
@@ -32,6 +33,31 @@ const MapComponent = () => {
   const socketRef = useRef<Socket>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const [guards, setGuards] = useState(0);
+  const [zones, setZones] = useState(0);
+  const getStats = async () => {
+    try {
+        const response = await fetch("/api/getActiveGuardsZones", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log("Response is : " , response)
+        if (!response.ok) {
+            throw new Error("Failed to fetch stats");
+        }
+
+        const data = await response.json();
+        console.log("Response from getStats:", data);
+
+        // Update state with fetched data
+        setGuards(data.totalGuards || 0);
+        setZones(data.totalSocieties || 0);
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+    }
+};
 
   useEffect(() => {
     connectSocket();
@@ -49,7 +75,13 @@ const MapComponent = () => {
       socketRef.current?.disconnect();
       disconnectSocket();
     };
+    
   }, []);
+  useEffect(() => {
+    getStats();  
+    console.log("Number of guards : " , guards);
+    console.log("Number of zones : " , zones);
+  },[]); 
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -68,20 +100,6 @@ const MapComponent = () => {
 
     const onLocationFound = (e: LocationEvent): void => {
       const radius: number = e.accuracy / 2;
-      // const userMarker = L.marker(e.latlng, {
-      //   icon: L.icon({
-      //     iconUrl:
-      //       "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-      //     iconSize: [25, 41],
-      //     iconAnchor: [12, 41],
-      //     popupAnchor: [1, -34],
-      //     shadowUrl:
-      //       "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-      //     shadowSize: [41, 41],
-      //   }),
-      // }).addTo(map);
-      // userMarker.bindPopup("You are here").openPopup();
-      // L.circle(e.latlng, radius).addTo(map);
     };
 
     map.locate({ setView: true, maxZoom: 16 });
@@ -126,28 +144,17 @@ const MapComponent = () => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
             <StatsCard
               title="Active Guards"
-              value="24"
+              value={`${guards}`}
               icon={<Users className="h-6 w-6 text-indigo-600" />}
               trend="+2 from yesterday"
             />
             <StatsCard
               title="Active Zones"
-              value="8"
+              value={`${zones}`}
               icon={<MapPin className="h-6 w-6 text-green-600" />}
               trend="All zones covered"
             />
-            <StatsCard
-              title="Open Incidents"
-              value="3"
-              icon={<AlertTriangle className="h-6 w-6 text-red-600" />}
-              trend="2 high priority"
-            />
-            <StatsCard
-              title="Avg. Response Time"
-              value="4.2m"
-              icon={<Clock className="h-6 w-6 text-orange-600" />}
-              trend="Within SLA"
-            />
+           
           </div>
 
           {/* Map and Lists Grid */}
@@ -173,14 +180,14 @@ const MapComponent = () => {
 
             {/* Alerts and Guards List */}
             <div className="space-y-8">
-              <div className="bg-white rounded-lg shadow">
+              {/* <div className="bg-white rounded-lg shadow">
                 <div className="p-4 border-b border-gray-200">
                   <h2 className="text-lg font-medium text-gray-900">
                     Recent Alerts
                   </h2>
                 </div>
                 <AlertsList />
-              </div>
+              </div> */}
 
               <div className="bg-white rounded-lg shadow">
                 <div className="p-4 border-b border-gray-200">
@@ -193,7 +200,7 @@ const MapComponent = () => {
             </div>
           </div>
         </main>
-        <ChartPage />
+        {/* <ChartPage /> */}
       </div>
     </div>
   );

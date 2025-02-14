@@ -62,6 +62,22 @@ const SignIn = () => {
   });
   const onSubmit = async (data: any) => {
     console.log("Form submitted", data);
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log("User Registered:", result);
+      } else {
+        console.error("Registration Error:", result);
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
   };
   return (
     <div className="flex justify-center">
@@ -76,6 +92,7 @@ const SignIn = () => {
               {error && (
                 <div className="font-bold text-1xl text-red-500">{error}</div>
               )}
+
               <FormField
                 control={form.control}
                 name="role"
@@ -85,7 +102,7 @@ const SignIn = () => {
                     <FormControl>
                       <select
                         {...field}
-                        className="p-2 border border-gray-300 rounded-lg text-black"
+                        className="p-2 border border-gray-300 rounded-lg text-black w-full"
                       >
                         <option value="guard">Guard</option>
                         <option value="police">Police</option>
@@ -97,96 +114,101 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Full Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Email " {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Age</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="Age" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Phone Number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="aadhar"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Aadhar Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Aadhar Number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Full Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Age</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Age" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Phone Number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="aadhar"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Aadhar Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Aadhar Number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="society"
@@ -223,7 +245,7 @@ const SignIn = () => {
         </TabsContent>
         <TabsContent value="login">
           <div className="flex flex-col items-center justify-center w-full  bg-gray-50 px-4">
-            <div className="bg-white p-8 shadow-md rounded-xl w-full max-w-md">
+            <div className="bg-white p-8 shadow-md rounded-xl ">
               <h1 className="text-3xl font-semibold text-gray-800 text-center mb-6">
                 Welcome Back
               </h1>
@@ -271,7 +293,12 @@ const SignIn = () => {
               </form>
               <div className="mt-6 space-y-3">
                 <button
-                  onClick={() => signIn("google", { callbackUrl: "/admin" })}
+                  onClick={async () => {
+                    const res = await signIn("google", {
+                      callbackUrl: "/admin",
+                    });
+                    console.log("Google Login Response:", res);
+                  }}
                   className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 py-3 rounded-lg shadow-sm hover:bg-gray-100 transition"
                 >
                   <img src={google.src} alt="Google" className="w-5 h-5" />
@@ -280,7 +307,12 @@ const SignIn = () => {
                   </span>
                 </button>
                 <button
-                  onClick={() => signIn("github", { callbackUrl: "/admin" })}
+                  onClick={async () => {
+                    const res = await signIn("github", {
+                      callbackUrl: "/admin",
+                    });
+                    console.log("GitHub Login Response:", res);
+                  }}
                   className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white py-3 rounded-lg shadow-sm hover:bg-gray-700 transition"
                 >
                   <img src={githubicon.src} alt="GitHub" className="w-5 h-5" />

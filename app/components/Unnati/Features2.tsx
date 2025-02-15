@@ -16,16 +16,16 @@ interface Features2Props {
 }
 
 const Features2: React.FC<Features2Props> = ({
-  feature3Description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.',
-  feature1ImgAlt = 'feature 1',
-  feature1Description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.',
+  feature3Description = 'Appoint guards daily using a dynamic list filtered by last duty.',
+  feature1ImgAlt = 'Attendance Verification',
+  feature1Description = 'Guards scan a QR code that redirects to a secure verification portal with face detection for identity confirmation.',
   feature3ImgAlt = 'image',
-  feature2Title = 'Live Location Tracking',
+  feature2Title = 'Emergency SOS Feature',
   feature1Title = 'User Friendly ',
   feature1ImgSrc = 'https://images.unsplash.com/photo-1494026222377-872a605b54ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY1OXw&ixlib=rb-4.0.3&q=80&w=1080',
   feature3ImgSrc = 'https://images.unsplash.com/photo-1468779065891-103dac4a7c48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2MHw&ixlib=rb-4.0.3&q=80&w=1080',
-  feature2Description = 'Track guards in real time via GPS to ensure their whereabouts and monitor their movements for enhanced security.',
-  feature3Title = 'Feature #3',
+  feature2Description = 'An SOS button that sends live location notifications to both Admin and the appointed guard.',
+  feature3Title = 'Society Owner Dashboard and appoint guards',
   feature2ImgAlt = 'Live Location Tracking Image',
   feature2ImgSrc = 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2MXw&ixlib=rb-4.0.3&q=80&w=1080',
 }) => {

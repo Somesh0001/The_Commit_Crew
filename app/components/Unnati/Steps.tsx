@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 
 interface StepsProps {
   step1Description?: string;
@@ -13,14 +13,14 @@ interface StepsProps {
 }
 
 const Steps: React.FC<StepsProps> = ({
+  step1Title = 'Create Account',
   step1Description = 'Sign up for an account to access the platform.',
-  step3Description = 'Define virtual boundaries and receive alerts when guards breach them.',
   step2Title = 'Add Security Guards',
   step2Description = 'Input details and assign roles for security personnel.',
-  step1Title = 'Create Account',
-  step3Title = 'Set Up Geo-Fencing',
-  step4Description = 'Track guard locations, attendance, and incidents live on the dashboard.',
+  step3Title = 'Emergency SOS Feature:',
+  step3Description = 'An SOS button that sends live location notifications to both Admin and the appointed guard.',
   step4Title = 'Monitor in Real Time',
+  step4Description = 'Track guard locations, attendance, and incidents live on the dashboard.',
 }) => {
   return (
     <>
@@ -32,15 +32,19 @@ const Steps: React.FC<StepsProps> = ({
                 Discover the Power of Our Products
               </h2>
               <p className="thq-body-large">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius enim in eros elementum tristique. Duis
-                cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
-                commodo diam libero vitae erat.
+              The urban security management platform offers real-time GPS tracking and dynamic dashboards for admins, society owners, field users and guards. It streamlines guard appointments, attendance verification via QR and face detection, and incident alerts. With a modern design and integrated payment options, our solution delivers efficient, responsive, and secure urban oversight.
+
+
+
+
+
+
+
               </p>
               <div className="steps-actions">
-                <button className="thq-button-animated thq-button-filled steps-button">
+                {/* <button className="thq-button-animated thq-button-filled steps-button">
                   <span className="thq-body-small">Main action</span>
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="steps-container3">

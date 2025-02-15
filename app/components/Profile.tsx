@@ -42,7 +42,7 @@ const FieldVisitorProfile: React.FC<FieldVisitorProfileProps> = ({
       day: "numeric",
     });
   };
-
+console.log("firstName: ", visitor);
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       {/* Header */}

@@ -61,7 +61,7 @@
 
 // export default Page;
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import GuardFeedback from "../components/GuardFeedbackForm";
@@ -87,7 +87,54 @@ const Page = () => {
     createdAt: "2025-02-14T08:30:00.000Z",
     updatedAt: "2025-02-14T08:30:00.000Z",
   };
+   console.log("profile", session?.user);
+   const [user, setUser] = useState({
+     _id: "",
+     role: "",
+     name: "",
+     email: "",
+     age: 0,
+     phone: "",
+     aadhar: "",
+     society: "",
+     address: "",
+     approved: false,
+     setDuty: null,
+     createdAt: "",
+     updatedAt: "",
+   });
+    const [error, setError] = useState("");
 
+    const fetchUserById = async (id: string) => {
+        try {
+            const res = await fetch("/api/getuser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id }),
+            });
+
+            if (!res.ok) {
+                throw new Error("User not found");
+            }
+
+            const data = await res.json();
+            setUser(data);
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("An unknown error occurred");
+            }
+        }
+    };
+    useEffect(() => {
+      if (session?.user?.id) {
+        fetchUserById(session.user.id);
+      }
+    }, [session]);
+    
   return (
     <div className="p-4 h-screen">
       <div className="text-3xl text-center font-bold">Dashboard</div>
@@ -95,7 +142,7 @@ const Page = () => {
       {session?.user ? (
         <>
           <p className="text-center mt-4">Hello, {session.user.name}</p>
-          <Profile visitor={visitor} />
+          <Profile visitor={user} />
           {session?.user.role ==="guard" && (
             <div className=" flex flex-col items-center p-4">
               <div>

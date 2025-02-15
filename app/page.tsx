@@ -21,6 +21,7 @@
 //     </div>
 //   )
 // }
+
 import { options } from "./api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
 import Fin from "./home/page";

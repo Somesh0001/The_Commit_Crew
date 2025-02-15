@@ -63,25 +63,23 @@ const MapComponent = () => {
     connectSocket();
     if (socketRef.current) {
       socketRef.current.emit("get-data");
-      socketRef.current.on("message", (data) => {
-        console.log(data);
-        setData(data);
+      socketRef.current.on("message", (datas) => {
+        setData(datas);
+        console.log("change",data)
       });
       socketRef.current.on("new-user", (data) => {
         setData((users) => [...users, data]);
       });
     }
-    return () => {
-      socketRef.current?.disconnect();
-      disconnectSocket();
-    };
-    
-  }, []);
-  useEffect(() => {
     getStats();  
     console.log("Number of guards : " , guards);
     console.log("Number of zones : " , zones);
-  },[]); 
+
+  }, []);
+
+  useEffect(() => {
+    console.log(data)
+  },[data])
 
   useEffect(() => {
     if (typeof window === "undefined") return;

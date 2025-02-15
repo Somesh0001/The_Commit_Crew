@@ -2,6 +2,7 @@
 
 import React from "react";
 import Script from "dangerous-html/react";
+import Image from "next/image";
 
 interface HeroProps {
   heading1: string;
@@ -52,6 +53,7 @@ const Hero: React.FC<HeroProps> = (props) => {
             </button>
           </div>
         </div>
+        
         <div className="hero-content2">
           {/* First Animated Row Container */}
           <div className="hero-row-container1 thq-animated-group-container-horizontal thq-mask-image-horizontal">

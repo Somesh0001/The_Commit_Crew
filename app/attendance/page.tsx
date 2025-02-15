@@ -40,11 +40,11 @@ const Page = () => {
     socketRef.current = io(ENDPOINT);
   };
 
-  const disconnectSocket = () => {
-    if (socketRef.current) {
-      socketRef.current.emit("disconnect");
-    }
-  };
+  // const disconnectSocket = () => {
+  //   if (socketRef.current) {
+  //     socketRef.current.emit("disconnect");
+  //   }
+  // };
 
   useEffect(() => {
     setInterval(() => {
@@ -59,23 +59,34 @@ const Page = () => {
   },[currentUser])
 
   useEffect(() => {
+    // Stop any active video streams when the page loads
+    const stopVideoStream = () => {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          stream.getTracks().forEach((track) => track.stop());
+        })
+        .catch((err) => console.error("Error stopping video stream:", err));
+    };
+  
+    stopVideoStream(); // Call the function to stop the video when the page loads
+  
     connectSocket();
-
-    
+  
     if (socketRef.current) {
       socketRef.current.on("new-user", (data) => {
         setUsers((users) => [...users, data]);
       });
-
+  
       socketRef.current.on("users", (data) => {
         setUsers(data);
       });
-
+  
       socketRef.current.on("current-user", (data) => {
         console.log("current-user", data);
         if (!currentUser) setCurrentUser(data);
       });
-
+  
       socketRef.current.on("position-change", (data) => {
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
@@ -84,22 +95,21 @@ const Page = () => {
         );
       });
     }
-
+  
     if (hasAccessLocation && currentUser) {
       watchLocation.current = navigator.geolocation.watchPosition(
         positionChange,
         locationResolveError
       );
     }
-
+  
     return () => {
       if (watchLocation.current !== null) {
         navigator.geolocation.clearWatch(watchLocation.current);
       }
-      disconnectSocket();
     };
   }, []);
-
+  
   function positionChange(data: {
     coords: { latitude: number; longitude: number };
   }) {
@@ -221,13 +231,11 @@ function handleVerifyPerson ()
   return (
     <div className="p-4 h-[60vh] flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold mb-4">Start Attendance</h1>
-      <Button onClick={handleVerifyPerson} className="mb-4">
-        Verify Person
-      </Button>
-      <Button onClick={initUserLocation} className="mb-4" disabled={!isUserIdentified}>
+       <p>The user is {isUserIdentified}</p>
+      <Button onClick={initUserLocation} className="mb-4">
         Get Location
       </Button>
-      <Button onClick={handleStartAttendance} className="mb-4" disabled={!isUserIdentified}>
+      <Button onClick={handleStartAttendance} className="mb-4" >
         Start Attendance
       </Button>
 

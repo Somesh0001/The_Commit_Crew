@@ -130,7 +130,7 @@ const MapComponent = () => {
         }),
       }).addTo(mapRef.current!);
 
-      marker.bindPopup(`${user.name}`).openPopup();
+      marker.bindPopup(`${user.name || user.coords.name}`).openPopup();
       markersRef.current.push(marker);
     });
   }, [data]);

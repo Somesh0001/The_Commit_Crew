@@ -1,22 +1,18 @@
 "use client";
-
 import React, { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 import { useSession } from "next-auth/react";
-
 // Define types for props
 interface PaymentButtonProps {
   amount: number;
   title:string;
 }
-
 const PaymentButton: React.FC<PaymentButtonProps> = ({ amount,title }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-
   // Load Razorpay script
   useEffect(() => {
     const loadScript = () => {
@@ -31,22 +27,17 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ amount,title }) => {
       
       document.body.appendChild(script);
     };
-
     loadScript();
   }, []);
-
   const makePayment = async () => {
     if (!razorpayLoaded) {
       alert("Payment system is still loading. Please try again in a few seconds.");
       return;
     }
-
     setIsLoading(true);
-
     const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID; // Use NEXT_PUBLIC for env variables in frontend
     const response = await fetch(`/api/order/create?amount=${amount}`);
     const { order } = await response.json();
-
     const options = {
       key: key,
       name: session?.user?.email ?? "",
@@ -71,7 +62,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ amount,title }) => {
             email: session?.user?.email ?? "",
           }),
         });
-
         const result = await res.json();
         if (!result?.error) {
           await fetch("/api/order/save", {

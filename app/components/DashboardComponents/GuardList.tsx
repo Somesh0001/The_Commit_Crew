@@ -32,8 +32,8 @@ const GuardsList: React.FC = () => {
   return (
     <div className="divide-y divide-gray-200">
       {guards.length > 0 ? (
-        guards.map((guard) => (
-          <div key={guard.id} className="p-4 hover:bg-gray-50">
+        guards.map((guard,i) => (
+          <div key={i} className="p-4 hover:bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">

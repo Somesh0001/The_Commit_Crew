@@ -133,6 +133,7 @@ const Page = () => {
     if (!socketRef.current) return;
     setHasAccessLocation(true);
     const { latitude, longitude } = data.coords;
+    console.log("Location fetched successfully", latitude, longitude);
     socketRef.current.emit("join", {
       name: session.data?.user?.name,
       latitude,

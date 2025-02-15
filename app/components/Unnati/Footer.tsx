@@ -53,9 +53,9 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Brand Section */}
         <div>
-          <h2 className="text-2xl font-semibold">YourBrand</h2>
+          <h2 className="text-2xl font-semibold">Security Committed</h2>
           <p className="text-gray-400 mt-2">
-            Building the future, one step at a time.
+            Securing the future, one step at a time.
           </p>
         </div>
 
@@ -64,18 +64,18 @@ const Footer = () => {
           <h3 className="text-xl font-medium">Quick Links</h3>
           <ul className="mt-3 space-y-2">
             <li>
-              <Link href="/about" className="text-gray-400 hover:text-white transition">
-                About Us
+              <Link href="/signin" className="text-gray-400 hover:text-white transition">
+               Sign In
               </Link>
             </li>
             <li>
-              <Link href="/services" className="text-gray-400 hover:text-white transition">
-                Services
+              <Link href="/profile" className="text-gray-400 hover:text-white transition">
+                Profile
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition">
-                Contact
+              <Link href="/" className="text-gray-400 hover:text-white transition">
+                Back to Home
               </Link>
             </li>
           </ul>
@@ -85,13 +85,13 @@ const Footer = () => {
         <div>
           <h3 className="text-xl font-medium">Follow Us</h3>
           <div className="mt-3 flex space-x-4">
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              Facebook
+            <a href="https://www.nitjsr.ac.in/" className="text-gray-400 hover:text-white transition">
+              The Creators
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
+            <a href="https://x.com/?lang=en&mx=2" className="text-gray-400 hover:text-white transition">
               Twitter
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
+            <a href="https://www.linkedin.com/in/unnati-chaurasia/" className="text-gray-400 hover:text-white transition">
               LinkedIn
             </a>
           </div>

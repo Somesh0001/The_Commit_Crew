@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "The Commit Crew",
+  title: "Security Committed",
   description: "Ojass Hackathon file of the commit crew",
 };
 

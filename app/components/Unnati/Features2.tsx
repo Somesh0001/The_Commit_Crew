@@ -21,7 +21,7 @@ const Features2: React.FC<Features2Props> = ({
   feature1Description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.',
   feature3ImgAlt = 'image',
   feature2Title = 'Live Location Tracking',
-  feature1Title = 'Feature #1',
+  feature1Title = 'User Friendly ',
   feature1ImgSrc = 'https://images.unsplash.com/photo-1494026222377-872a605b54ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY1OXw&ixlib=rb-4.0.3&q=80&w=1080',
   feature3ImgSrc = 'https://images.unsplash.com/photo-1468779065891-103dac4a7c48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2MHw&ixlib=rb-4.0.3&q=80&w=1080',
   feature2Description = 'Track guards in real time via GPS to ensure their whereabouts and monitor their movements for enhanced security.',

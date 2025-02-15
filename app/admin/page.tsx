@@ -5,6 +5,7 @@ import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
 import GuardsList from "../components/DashboardComponents/GuardList";
 import StatsCard from "../components/DashboardComponents/StatsCard";
+import GuardRequestBox from "../components/DashboardComponents/GuardRequestBox";
 
 const ENDPOINT = "http://localhost:4000";
 
@@ -171,6 +172,16 @@ const MapComponent = () => {
               icon={<MapPin className="h-6 w-6 text-green-600" />}
               trend="All zones covered"
             />
+            <div className="space-y-8">
+              <div className="bg-white rounded-lg shadow">
+                <div className="p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    On-Duty Guards
+                  </h2>
+                </div>
+                <GuardsList />
+              </div>
+            </div>
           </div>
 
           {/* Map and Lists Grid */}
@@ -193,18 +204,9 @@ const MapComponent = () => {
                 </div>
               </div>
             </div>
-
+           
             {/* Guards List */}
-            <div className="space-y-8">
-              <div className="bg-white rounded-lg shadow">
-                <div className="p-4 border-b border-gray-200">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    On-Duty Guards
-                  </h2>
-                </div>
-                <GuardsList />
-              </div>
-            </div>
+            <GuardRequestBox/>
           </div>
         </main>
       </div>

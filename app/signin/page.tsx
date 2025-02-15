@@ -100,7 +100,7 @@ const SignIn = () => {
             value="signin"
             className="px-4 py-2 border rounded hover:bg-gray-100"
           >
-            Sign In
+            Register
           </TabsTrigger>
           <TabsTrigger
             value="login"

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from "next/link";
 
 interface CTAProps {
   heading1?: string;
@@ -20,12 +21,14 @@ const CTA: React.FC<CTAProps> = ({
               <div className="cta-content">
                 <span className="thq-heading-2">{heading1}</span>
                 <p className="thq-body-large">{content1}</p>
+                <div className="cta-actions">
+                <Link href="/signin">
+                  <button type="button" className="thq-button-filled cta-button">
+                    {action1}
+                  </button>
+                </Link>
               </div>
-              <div className="cta-actions">
-                <button type="button" className="thq-button-filled cta-button">
-                  {action1}
-                </button>
-              </div>
+            </div>
             </div>
           </div>
         </div>

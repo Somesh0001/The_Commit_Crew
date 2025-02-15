@@ -1,44 +1,28 @@
 "use client";
-import React, { use, useEffect, useRef, useState } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import {  MapPin, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
-import { startAuthentication } from "@simplewebauthn/browser";
-import FaceChecker from "../components/FaceChecker";
-// import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { useSession } from "next-auth/react";
-import { Router } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useUserContext } from "@/context/UserContext";
-
+import AlertsList from "../components/DashboardComponents/AlertsList";
+import ChartPage from "../components/DashboardComponents/ChartPage";
+import GuardsList from "../components/DashboardComponents/GuardList";
+import StatsCard from "../components/DashboardComponents/StatsCard";
 
 const ENDPOINT = "http://localhost:4000";
 
-const Page = () => {
-  const session = useSession();
-  const socketRef = useRef<Socket>(null);
-  const watchLocation = useRef<number | null>(null);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [isTrueUser, setIsTrueUser] = useState(false) ;   
-  const router = useRouter();
-  const { isUserIdentified } = useUserContext();
-  const [users, setUsers] = useState<
+const MapComponent = () => {
+  const [data, setData] = useState<
     {
       socketId: string;
-      coords: { name: string; latitude: number; longitude: number };
+      name: string;
+      coords: { latitude: number; longitude: number };
     }[]
   >([]);
-  const [currentUser, setCurrentUser] = useState<{
-    socketId: string;
-    coords: { name: string; latitude: number; longitude: number };
-  }>();
-  const [hasAccessLocation, setHasAccessLocation] = useState(false);
-  const { toast } = useToast();
-
   const connectSocket = () => {
     socketRef.current = io(ENDPOINT);
   };
+
 
   const disconnectSocket = () => {
     if (socketRef.current) {
@@ -46,225 +30,178 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    setInterval(() => {
-      if (socketRef.current) {
-        console.log("socketRef.current", socketRef.current);
-        navigator.geolocation.getCurrentPosition(
-          positionChange,
-          locationResolveError
-        );
-      }
-    }, 1000);
-  },[currentUser])
+  const socketRef = useRef<Socket>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
+  const [guards, setGuards] = useState(0);
+  const [zones, setZones] = useState(0);
+  const getStats = async () => {
+    try {
+        const response = await fetch("/api/getActiveGuardsZones", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log("Response is : " , response)
+        if (!response.ok) {
+            throw new Error("Failed to fetch stats");
+        }
+
+        const data = await response.json();
+        console.log("Response from getStats:", data);
+
+        // Update state with fetched data
+        setGuards(data.totalGuards || 0);
+        setZones(data.totalSocieties || 0);
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+    }
+};
 
   useEffect(() => {
     connectSocket();
-
-
     if (socketRef.current) {
+      socketRef.current.emit("get-data");
+      socketRef.current.on("message", (datas) => {
+        setData(datas);
+        console.log("change",data)
+      });
       socketRef.current.on("new-user", (data) => {
-        setUsers((users) => [...users, data]);
-      });
-
-      socketRef.current.on("users", (data) => {
-        setUsers(data);
-      });
-
-      socketRef.current.on("current-user", (data) => {
-        console.log("current-user", data);
-        if (!currentUser) setCurrentUser(data);
-      });
-
-      socketRef.current.on("position-change", (data) => {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user.socketId === data.socketId ? data : user
-          )
-        );
+        setData((users) => [...users, data]);
       });
     }
+    getStats();  
+    console.log("Number of guards : " , guards);
+    console.log("Number of zones : " , zones);
 
-    if (hasAccessLocation && currentUser) {
-      watchLocation.current = navigator.geolocation.watchPosition(
-        positionChange,
-        locationResolveError
-      );
+  }, []);
+
+  useEffect(() => {
+    console.log(data)
+  },[data])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const map = L.map("map").setView([0, 0], 2);
+    mapRef.current = map;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    interface LocationEvent {
+      accuracy: number;
+      latlng: L.LatLng;
     }
+
+    const onLocationFound = (e: LocationEvent): void => {
+      const radius: number = e.accuracy / 2;
+    };
+
+    map.locate({ setView: true, maxZoom: 16 });
+    map.on("locationfound", onLocationFound);
 
     return () => {
-      if (watchLocation.current !== null) {
-        navigator.geolocation.clearWatch(watchLocation.current);
-      }
-      // disconnectSocket();
+      map.off("locationfound", onLocationFound);
     };
   }, []);
 
-  function positionChange(data: {
-    coords: { latitude: number; longitude: number };
-  }) {
-    const latitude = data.coords.latitude;
-    const longitude = data.coords.longitude;
-    if (socketRef.current && currentUser) {
-      socketRef.current.emit("position-change", {
-        socketId: currentUser?.socketId,
-        coords: {
-          name: session.data?.user?.name,
-          latitude,
-          longitude,
-        },
-      });
-    }
-  }
+  useEffect(() => {
+    if (!mapRef.current) return;
 
-  function initUserLocation() {
-    if (!navigator.geolocation) {
-      toast({
-        title: "Geolocation Unsupported",
-        description: "Your system does not support Geolocation",
-        variant: "destructive",
-      });
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      locationResolveSuccessfully,
-      locationResolveError
-    );
-  }
+    markersRef.current.forEach((marker) => marker.remove());
+    markersRef.current = [];
 
-  function locationResolveSuccessfully(data: {
-    coords: { latitude: number; longitude: number };
-  }) {
-    if (!socketRef.current) return;
-    setHasAccessLocation(true);
-    const { latitude, longitude } = data.coords;
-    console.log("Location fetched successfully", latitude, longitude);
-    socketRef.current.emit("join", {
-      name: session.data?.user?.name,
-      latitude,
-      longitude,
+    data.forEach((user) => {
+      const marker = L.marker([user.coords.latitude, user.coords.longitude], {
+        icon: L.icon({
+          iconUrl:
+            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+          shadowSize: [41, 41],
+        }),
+      }).addTo(mapRef.current!);
+
+      marker.bindPopup(`${user.name || user.coords.name}`).openPopup();
+      markersRef.current.push(marker);
     });
-    toast({
-      title: "Location",
-      description: "Location fetched successfully",
-    });
-  }
+  }, [data]);
 
-  function locationResolveError(error: GeolocationPositionError) {
-    let errorType = "";
-    if (error.code === 1) {
-      errorType = "Permission Denied";
-    } else if (error.code === 2) {
-      errorType = "Position Unavailable";
-    } else if (error.code === 3) {
-      errorType = "Timeout";
-    }
-
-    toast({
-      title: errorType,
-      description: error.message,
-      variant: "destructive",
-    });
-  }
-
-  async function handleFingerprintVerification() {
-    setIsVerifying(true);
-    try {
-      const optionsResponse = await fetch(
-        "/api/generate-authentication-options"
-      );
-      const options = await optionsResponse.json();
-      const authResp = await startAuthentication(options);
-      const verificationResponse = await fetch("/api/verify-authentication", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(authResp),
-      });
-      const verificationResult = await verificationResponse.json();
-
-      if (verificationResult.success) {
-        toast({
-          title: "Fingerprint Verified",
-          description: "Attendance marked present.",
-        });
-        // Once fingerprint is verified, mark attendance (e.g., using location)
-        initUserLocation();
-        setModalOpen(false);
-      } else {
-        toast({
-          title: "Verification Failed",
-          description: "Fingerprint did not match. Please try again.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Fingerprint verification error:", error);
-      toast({
-        title: "Error",
-        description: "An error occurred during fingerprint verification.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsVerifying(false);
-    }
-  }
-
-  // Handler when user clicks the "Start Attendance" button
-  function handleStartAttendance() {
-    // Open the fingerprint modal
-    setModalOpen(true);
-  }
-function handleVerifyPerson () 
-{
-  router.push("/identifyUser") ;  
-}
   return (
-    <div className="p-4 h-[60vh] flex flex-col justify-center items-center">
-      <h1 className="text-2xl font-bold mb-4">Start Attendance</h1>
-      <Button onClick={handleVerifyPerson} className="mb-4">
-        Verify Person
-      </Button>
-      <Button onClick={initUserLocation} className="mb-4" disabled={!isUserIdentified}>
-        Get Location
-      </Button>
-      <Button onClick={handleStartAttendance} className="mb-4" disabled={!isUserIdentified}>
-        Start Attendance
-      </Button>
-
-      {/* Fingerprint Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={() => setModalOpen(false)}
-          ></div>
-          {/* Modal Content */}
-          <div className="relative bg-white rounded shadow-lg p-8 z-10 w-80">
-            <h2 className="text-xl font-semibold mb-2">
-              Fingerprint Verification
-            </h2>
-            <p className="mb-4">
-              Please scan your fingerprint to mark your attendance.
-            </p>
-            <Button
-              onClick={handleFingerprintVerification}
-              disabled={isVerifying}
-            >
-              {isVerifying ? "Verifying..." : "Scan Fingerprint"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setModalOpen(false)}
-              className="mt-2"
-            >
-              Cancel
-            </Button>
+    <div>
+      <div className="w-full  ">
+        {/* Main Content */}
+        <main className="  px-4 sm:px-6 lg:px-8 py-8">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            <StatsCard
+              title="Active Guards"
+              value={`${guards}`}
+              icon={<Users className="h-6 w-6 text-indigo-600" />}
+              trend="+2 from yesterday"
+            />
+            <StatsCard
+              title="Active Zones"
+              value={`${zones}`}
+              icon={<MapPin className="h-6 w-6 text-green-600" />}
+              trend="All zones covered"
+            />
+           
           </div>
-        </div>
-      )}
+
+          {/* Map and Lists Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Map Section */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow">
+                <div className="p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Live Guard Locations
+                  </h2>
+                </div>
+                <div className="p-4 z-0">
+                  {JSON.stringify(data)}
+                  <div
+                    id="map"
+                    className="z-0"
+                    style={{ width: "50vw", height: "50vh" }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Alerts and Guards List */}
+            <div className="space-y-8">
+              {/* <div className="bg-white rounded-lg shadow">
+                <div className="p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Recent Alerts
+                  </h2>
+                </div>
+                <AlertsList />
+              </div> */}
+
+              <div className="bg-white rounded-lg shadow">
+                <div className="p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    On-Duty Guards
+                  </h2>
+                </div>
+                <GuardsList />
+              </div>
+            </div>
+          </div>
+        </main>
+        {/* <ChartPage /> */}
+      </div>
     </div>
   );
 };
 
-export default Page;
+export default MapComponent;

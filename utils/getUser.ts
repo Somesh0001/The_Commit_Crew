@@ -8,6 +8,7 @@ export interface UserInterface {
 
 export const getUser = async (email: string) => {
     await connectDB()
+    console.log(email);
     try {
         const user = await User.findOne({ email });
         console.log(user);

@@ -142,7 +142,7 @@ const page = () => {
         </div>
 
         <div className="p-6">
-        <GuardRequestBox/>
+        
         </div>
       </div>
     </div>

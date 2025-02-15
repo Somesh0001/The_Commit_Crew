@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Link } from "lucide-react";
 interface SocietyOwner {
   _id: string;
   name: string;
@@ -26,6 +27,7 @@ const Page = () => {
   const router = useRouter();
   const [ownerDetails, setOwnerDetails] = useState<SocietyOwner | null>(null);
   const [guards, setGuards] = useState<Guard[]>([]);
+  console.log("guard",guards);
   const [selectedGuard, setSelectedGuard] = useState<string | null>(null);
   const [selectedGuardDetails, setSelectedGuardDetails] =
     useState<Guard | null>(null);
@@ -98,7 +100,7 @@ const Page = () => {
       sendNotification("admin");
     }, 0);
   };
-  
+
   const sendNotification = async (recipient: "admin" | "guard") => {
     if (!message.trim()) {
       alert("Please enter a message before notifying.");
@@ -168,17 +170,38 @@ const Page = () => {
   };
 
   return (
-    <div className="h-auto w-screen bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-8">
+    <div className="h-auto w-full bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
+      <div className="w-full  bg-white shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Society Owner Dashboard
         </h1>
-        <button
+
+        {/* alertButton */}
+        <>
+          <div className="flex absolute right-14 top-6 flex-col items-center justify-center  gap-6 ">
+            <div
+              className="button w-20 h-20 bg-red-600 rounded-full cursor-pointer select-none
+    active:translate-y-2  active:[box-shadow:0_0px_0_0_#FF0000FF,0_0px_0_0_#FF000041]
+    active:border-b-[0px]
+    transition-all duration-150 [box-shadow:0_8px_0_0_#FF0000FF,0_13px_0_0_#FF000041]
+    border-[1px] border-red-300
+  "
+            >
+              <span
+                onClick={() => sendSOS()}
+                className="flex flex-col justify-center items-center h-full text-white font-bold text-[0.7rem] "
+              >
+                Emergency
+              </span>
+            </div>
+          </div>
+        </>
+        {/* <button
           onClick={() => sendSOS()}
           className="px-6 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-800 transition"
         >
           SOS
-        </button>
+        </button> */}
 
         {ownerDetails && (
           <div className="mt-6 p-6 bg-gray-100 border-l-4 border-gray-500 rounded-lg">
@@ -280,14 +303,19 @@ const Page = () => {
           </div>
         )}
       </div>
-      <div className="mt-6 flex gap-4">
-        <button
-          onClick={handleNotify}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Notify
-        </button>
+      <div className="flex w-full justify-around items-center">
+        <div className="mt-6 flex gap-4">
+        
+          <button
+            onClick={handleNotify}
+            className="px-32 py-4 bg-blue-600 text-white rounded-xl text-xl font-semibold tracking-wide hover:bg-blue-700"
+          >
+            Notify
+          </button>
+         
+        </div>
       </div>
+
       {showNotifyModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">

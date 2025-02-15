@@ -2,7 +2,7 @@
 import React, { use, useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { startAuthentication } from "@simplewebauthn/browser";
-
+import FaceChecker from "../components/FaceChecker";
 // import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +16,7 @@ const Page = () => {
   const watchLocation = useRef<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  
 
   const [users, setUsers] = useState<
     {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useTranslations } from 'next-intl'
-
+import PaymentButton from '../PaymentButton'; 
 interface PricingProps {
   content1?: string
   heading1?: string
@@ -61,23 +61,23 @@ const Pricing: React.FC<PricingProps> = ({
   heading1 = 'Pricing plan',
   content2 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
   plan1 = 'Basic Plan',
-  plan1Price = '$50/month',
-  plan1Yearly = '$500/year',
+  plan1Price = 'Rs.50/month',
+  plan1Yearly = 'Rs.500/year',
   plan1Feature1 = 'Security Guard Database',
   plan1Feature2 = 'Attendance & Shift Monitoring',
   plan1Feature3 = 'Incident Reporting',
   plan1Action = 'Sign Up Now',
   plan2 = 'Standard Plan',
-  plan2Price = '$100/month',
-  plan2Yearly = '$1000/year',
+  plan2Price = 'Rs.100/month',
+  plan2Yearly = 'Rs.1000/year',
   plan2Feature1 = 'Live Location Tracking',
   plan2Feature2 = 'Multi-Level Access Control',
   plan2Feature3 = 'Incident Reporting',
   plan2Feature4 = 'Geo-Fencing & Alerts',
   plan2Action = 'Sign Up Now',
   plan3 = 'Premium Plan',
-  plan3Price = '$150/month',
-  plan3Yearly = '$1500/year',
+  plan3Price = 'Rs.150/month',
+  plan3Yearly = 'Rs.1500/year',
   plan3Feature1 = 'Live Location Tracking',
   plan3Feature2 = 'Multi-Level Access Control',
   plan3Feature3 = 'Incident Reporting',
@@ -85,23 +85,23 @@ const Pricing: React.FC<PricingProps> = ({
   plan3Feature5 = 'Predictive Deployment',
   plan3Action = 'Sign Up Now',
   plan11 = 'Basic plan',
-  plan1Price1 = '$200/yr',
-  plan1Yearly1 = 'or $20 monthly',
+  plan1Price1 = 'Rs.200/yr',
+  plan1Yearly1 = 'or Rs.20 monthly',
   plan1Feature11 = 'Multi-Level Access Control',
   plan1Feature21 = 'Geo-Fencing & Alerts',
   plan1Feature31 = 'Predictive Deployment',
   plan1Action1 = 'Get started',
   plan21 = 'Business plan',
-  plan2Price1 = '$299/yr',
-  plan2Yearly1 = 'or $29 monthly',
+  plan2Price1 = 'Rs.299/yr',
+  plan2Yearly1 = 'or Rs.29 monthly',
   plan2Feature11 = 'Attendance & Shift Monitoring',
   plan2Feature21 = 'Predictive Deployment',
   plan2Feature31 = 'Security Guard Database',
   plan2Feature41 = 'Feature text goes here',
   plan2Action1 = 'Get started',
   plan31 = 'Enterprise plan',
-  plan3Price1 = '$499/yr',
-  plan3Yearly1 = 'or $49 monthly',
+  plan3Price1 = 'Rs.499/yr',
+  plan3Yearly1 = 'or Rs.49 monthly',
   plan3Feature11 = 'Security Guard Database',
   plan3Feature21 = 'Attendance & Shift Monitoring',
   plan3Feature31 = '',
@@ -194,9 +194,7 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button14 thq-button-outline thq-button-animated">
-                  <span className="thq-body-small">{plan1Action}</span>
-                </button>
+                <PaymentButton amount={50} title={"Pay now"}/>
               </div>
               <div className="pricing-column pricing-column2 thq-card">
                 <div className="pricing-price12">
@@ -242,9 +240,7 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button15 thq-button-animated thq-button-filled">
-                  <span className="thq-body-small">{plan2Action}</span>
-                </button>
+                <PaymentButton amount={100} title={"Pay now"}/>
               </div>
               <div className="pricing-column pricing-column3 thq-card">
                 <div className="pricing-price14">
@@ -298,9 +294,7 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button16 thq-button-animated thq-button-filled">
-                  <span className="thq-body-small">{plan3Action}</span>
-                </button>
+                <PaymentButton amount={150} title={"Pay now"}/>
               </div>
             </div>
           )}
@@ -345,9 +339,7 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button17 thq-button-outline thq-button-animated">
-                  <span className="thq-body-small">{plan1Action1}</span>
-                </button>
+                <PaymentButton amount={200} title={"Pay now"}/>
               </div>
               <div className="pricing-column pricing-column5 thq-card">
                 <div className="pricing-price18">
@@ -395,15 +387,13 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button18 thq-button-animated thq-button-filled">
-                  <span className="thq-body-small">{plan2Action1}</span>
-                </button>
+                <PaymentButton amount={299} title={"Pay now"}/>
               </div>
               <div className="pricing-column pricing-column6 thq-card">
                 <div className="pricing-price20">
                   <div className="pricing-price21">
                     <span className="pricing-text56 thq-body-large">
-                      {plan31}
+                      {plan31}  
                     </span>
                     <h3 className="pricing-text57 thq-heading-3">
                       {plan3Price1}
@@ -453,9 +443,7 @@ const Pricing: React.FC<PricingProps> = ({
                     </div>
                   </div>
                 </div>
-                <button className="pricing-button19 thq-button-animated thq-button-filled">
-                  <span className="thq-body-small">{plan3Action1}</span>
-                </button>
+                <PaymentButton amount={499} title={"Pay now"}/>  
               </div>
             </div>
           )}

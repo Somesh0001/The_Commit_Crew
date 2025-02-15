@@ -17,7 +17,7 @@ import Pricing from '../components/Unnati/Pricing'
 import Steps from '../components/Unnati/Steps'
 // import Testimonial from './Testimonial'
 
-
+import PaymentButton from '../components/PaymentButton'
 
 // import './style.css'
 // import Hero from './components/Unnati/Hero'
@@ -71,7 +71,7 @@ export default function Fin() {
   image9Alt="Hero Image"
   image1Src="https://images.unsplash.com/photo-1672357867665-4e4f7392edce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2NHw&ixlib=rb-4.0.3&q=80&w=1080"
 />
-
+     {/* <PaymentButton amount={1}/>  */}
 
     
       <Features1/>

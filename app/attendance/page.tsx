@@ -3,7 +3,6 @@ import React, { use, useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { startAuthentication } from "@simplewebauthn/browser";
 import FaceChecker from "../components/FaceChecker";
-// import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
@@ -40,11 +39,7 @@ const Page = () => {
     socketRef.current = io(ENDPOINT);
   };
 
-  // const disconnectSocket = () => {
-  //   if (socketRef.current) {
-  //     socketRef.current.emit("disconnect");
-  //   }
-  // };
+
 
   useEffect(() => {
     setInterval(() => {

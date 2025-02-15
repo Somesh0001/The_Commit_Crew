@@ -6,7 +6,13 @@ const FeedbackSchema = new mongoose.Schema(
     comment: { type: String, required: true }, // User feedback comment
     givenBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // User who gives feedback
     givenTo: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Guard receiving feedback
-    createdAt: { type: Date, default: Date.now }, // Timestamp for feedback
+    createdAt: { type: Date, default: Date.now } // Timestamp for feedback
+  },
+  {
+    // These options ensure that when converting documents to JSON or plain objects,
+    // virtuals (if any) are included and the output is a plain object.
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 

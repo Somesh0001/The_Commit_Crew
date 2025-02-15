@@ -1,19 +1,14 @@
 "use server";
 
-import connectDB from "@/lib/mongo";
 import User from "@/models/Roles";
-export interface UserInterface {
-    email: string;
-}
 
 export const getUser = async (email: string) => {
-    await connectDB()
-    console.log(email);
-    try {
-        const user = await User.findOne({ email });
-        console.log(user);
-        return user;
-    } catch (error) {
-        return error;
-    }
+  try {
+    const user = await User.findOne({ email }).lean();
+    // Convert to a plain object
+    const plainUser = JSON.parse(JSON.stringify(user));
+    return { data: plainUser };
+  } catch (error: any) {
+    return { error: error.message };
+  }
 };

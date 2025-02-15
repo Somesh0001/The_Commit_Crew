@@ -7,6 +7,10 @@ import FaceChecker from "../components/FaceChecker";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/UserContext";
+
 
 const ENDPOINT = "http://localhost:4000";
 
@@ -16,8 +20,9 @@ const Page = () => {
   const watchLocation = useRef<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  
-
+  const [isTrueUser, setIsTrueUser] = useState(false) ;   
+  const router = useRouter();
+  const { isUserIdentified } = useUserContext();
   const [users, setUsers] = useState<
     {
       socketId: string;
@@ -209,14 +214,20 @@ const Page = () => {
     // Open the fingerprint modal
     setModalOpen(true);
   }
-
+function handleVerifyPerson () 
+{
+  router.push("/identifyUser") ;  
+}
   return (
     <div className="p-4 h-[60vh] flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold mb-4">Start Attendance</h1>
-      <Button onClick={initUserLocation} className="mb-4">
+      <Button onClick={handleVerifyPerson} className="mb-4">
+        Verify Person
+      </Button>
+      <Button onClick={initUserLocation} className="mb-4" disabled={!isUserIdentified}>
         Get Location
       </Button>
-      <Button onClick={handleStartAttendance} className="mb-4">
+      <Button onClick={handleStartAttendance} className="mb-4" disabled={!isUserIdentified}>
         Start Attendance
       </Button>
 

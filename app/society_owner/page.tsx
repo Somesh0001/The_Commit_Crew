@@ -168,8 +168,8 @@ const Page = () => {
   };
 
   return (
-    <div className="h-auto w-screen bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-8">
+    <div className="h-auto w-full bg-gray-100 flex flex-col items-center justify-center overflow-auto p-6">
+      <div className="w-full  bg-white shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold text-gray-800 text-center">
           Society Owner Dashboard
         </h1>

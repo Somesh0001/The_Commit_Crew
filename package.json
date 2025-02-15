@@ -48,6 +48,7 @@
     "dangerous-html": "^0.1.13",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.5.2",
+    "face-api.js": "^0.22.2",
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",

@@ -22,12 +22,12 @@ const Features2: React.FC<Features2Props> = ({
   feature3ImgAlt = 'image',
   feature2Title = 'Emergency SOS Feature',
   feature1Title = 'User Friendly ',
-  feature1ImgSrc = 'https://images.unsplash.com/photo-1494026222377-872a605b54ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY1OXw&ixlib=rb-4.0.3&q=80&w=1080',
-  feature3ImgSrc = 'https://images.unsplash.com/photo-1468779065891-103dac4a7c48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2MHw&ixlib=rb-4.0.3&q=80&w=1080',
+  feature1ImgSrc = 'https://www.itrobes.com/wp-content/uploads/2021/10/User-friendly-software.jpg',
+  feature3ImgSrc = 'https://images.klipfolio.com/website/public/141b88a0-7222-45fd-8349-cadd876a5b03/Business-Dashboard-example.jpg',
   feature2Description = 'An SOS button that sends live location notifications to both Admin and the appointed guard.',
   feature3Title = 'Society Owner Dashboard and appoint guards',
   feature2ImgAlt = 'Live Location Tracking Image',
-  feature2ImgSrc = 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2MXw&ixlib=rb-4.0.3&q=80&w=1080',
+  feature2ImgSrc = 'https://play-lh.googleusercontent.com/ibGrsOSIungUGH69-cD0PAxoOi2rdYGKd8LDhanme4iGyh2aAXukKXpdpSFbehEk38M=w600-h300-pc0xffffff-pd',
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
 

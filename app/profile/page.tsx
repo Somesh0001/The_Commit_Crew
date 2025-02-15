@@ -72,21 +72,21 @@ import Image from "next/image";
 const Page = () => {
   const { data: session } = useSession();
 
-  const visitor = {
-    _id: "1",
-    role: "visitor",
-    name: "Rohan Sharma",
-    email: "rohan.sharma@example.com",
-    age: 28,
-    phone: "9876543210",
-    aadhar: "123456789012",
-    society: "Gokuldham",
-    address: "B-102, Gokuldham Society, Mumbai",
-    approved: false,
-    setDuty: null,
-    createdAt: "2025-02-14T08:30:00.000Z",
-    updatedAt: "2025-02-14T08:30:00.000Z",
-  };
+  // const visitor = {
+  //   _id: "1",
+  //   role: "visitor",
+  //   name: "Rohan Sharma",
+  //   email: "rohan.sharma@example.com",
+  //   age: 28,
+  //   phone: "9876543210",
+  //   aadhar: "123456789012",
+  //   society: "Gokuldham",
+  //   address: "B-102, Gokuldham Society, Mumbai",
+  //   approved: false,
+  //   setDuty: null,
+  //   createdAt: "2025-02-14T08:30:00.000Z",
+  //   updatedAt: "2025-02-14T08:30:00.000Z",
+  // };
    console.log("profile", session?.user);
    const [user, setUser] = useState({
      _id: "",
@@ -141,7 +141,7 @@ const Page = () => {
 
       {session?.user ? (
         <>
-          <p className="text-center mt-4">Hello, {session.user.name}</p>
+          {/* <p className="text-center mt-4">Hello, {session.user.name}</p> */}
           <Profile visitor={user} />
           {session?.user.role ==="guard" && (
             <div className=" flex flex-col items-center p-4">

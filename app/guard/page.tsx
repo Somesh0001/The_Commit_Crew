@@ -24,6 +24,55 @@ interface Feedback {
 }
 
 const Page = () => {
+
+  const [user, setUser] = useState({
+       _id: "",
+       role: "",
+       name: "",
+       email: "",
+       age: 0,
+       phone: "",
+       aadhar: "",
+       society: "",
+       address: "",
+       approved: false,
+       setDuty: null,
+       createdAt: "",
+       updatedAt: "",
+     });
+      // const [error, setError] = useState("");
+      console.log("guard", user);
+  
+      const fetchUserById = async (id: string) => {
+          try {
+              const res = await fetch("/api/getuser", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ id }),
+              });
+  
+              if (!res.ok) {
+                  throw new Error("User not found");
+              }
+  
+              const data = await res.json();
+              setUser(data);
+          } catch (err) {
+              if (err instanceof Error) {
+                  setError(err.message);
+              } else {
+                  setError("An unknown error occurred");
+              }
+          }
+      };
+  const session = useSession();
+      useEffect(() => {
+        if (session?.data?.user?.id) {
+          fetchUserById(session.data.user.id);
+        }
+      }, [session]);
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +97,6 @@ const Page = () => {
     address: "",
     approved: false,
   });
-  const session = useSession();
 
   useEffect(() => {
     const fetchGuardFeedback = async () => {
@@ -87,8 +135,7 @@ const Page = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-100 py-8 px-4">
-      {JSON.stringify(guardData)}
-      {JSON.stringify(session)}
+      
       <div className=" bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Profile Header */}
         <div className="bg-blue-600 p-6 flex flex-wrap gap-4 items-center justify-between">
@@ -98,20 +145,20 @@ const Page = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">
-                {guardData.name}
+                {user.name}
               </h1>
-              <p className="text-blue-100">{guardData.role.toUpperCase()}</p>
+              <p className="text-blue-100">{user.role.toUpperCase()}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <span
               className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                guardData.approved
+                user.approved
                   ? "bg-green-100 text-green-800"
                   : "bg-red-100 text-red-800"
               }`}
             >
-              {guardData.approved ? "Approved" : "Pending Approval"}
+              {user.approved ? "Approved" : "Pending Approval"}
             </span>
             <Link
               href="/api/auth/signout"
@@ -129,22 +176,22 @@ const Page = () => {
             <InfoItem
               icon={<FaUser />}
               label="Age"
-              value={`${guardData.age} years`}
+              value={`${user.age} years`}
             />
             <InfoItem
               icon={<FaEnvelope />}
               label="Email"
-              value={guardData.email}
+              value={user.email}
             />
             <InfoItem
               icon={<FaPhone />}
               label="Phone"
-              value={guardData.phone}
+              value={user.phone}
             />
             <InfoItem
               icon={<FaIdCard />}
               label="Aadhar"
-              value={guardData.aadhar}
+              value={user.aadhar}
             />
           </div>
 
@@ -153,12 +200,12 @@ const Page = () => {
             <InfoItem
               icon={<FaBuilding />}
               label="Society"
-              value={guardData.society}
+              value={user.society}
             />
             <InfoItem
               icon={<FaHome />}
               label="Address"
-              value={guardData.address}
+              value={user.address}
             />
           </div>
         </div>

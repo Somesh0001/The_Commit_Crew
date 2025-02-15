@@ -96,7 +96,7 @@ const Page = () => {
         <>
           <p className="text-center mt-4">Hello, {session.user.name}</p>
           <Profile visitor={visitor} />
-          {session?.user && (
+          {session?.user.role ==="guard" && (
             <div className=" flex flex-col items-center p-4">
               <div>
                 <p className="text-center mt-4">Scan QR code to check-in</p>

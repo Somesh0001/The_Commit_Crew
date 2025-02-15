@@ -3,7 +3,6 @@ import { JSX } from 'react';
 import React from 'react'
 import { FaShieldAlt, FaMapMarkerAlt, FaRegClock, FaPhoneAlt, FaEnvelope, FaIdCard } from 'react-icons/fa';
 import { MdEdit, MdAssignmentInd } from 'react-icons/md';
-import GuardRequestBox from '../components/DashboardComponents/GuardRequestBox';
 interface OfficerData {
   _id: string;
   role: string;

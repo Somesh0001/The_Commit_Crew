@@ -19,10 +19,9 @@ const FaceRecognition = ({ videoRef: externalVideoRef }) => {
       await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
       await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
     };
-
+  
     const startVideo = async () => {
       try {
-        await loadModels();
         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -31,10 +30,16 @@ const FaceRecognition = ({ videoRef: externalVideoRef }) => {
         console.error("Error starting video:", err);
       }
     };
-
-    startVideo();
-    loadPredefinedImage();
+  
+    const initialize = async () => {
+      await loadModels(); // Ensure models are loaded first
+      startVideo();
+      loadPredefinedImage();
+    };
+  
+    initialize();
   }, []);
+  
 
   const loadPredefinedImage = async () => {
     try {
@@ -60,6 +65,7 @@ const FaceRecognition = ({ videoRef: externalVideoRef }) => {
     if (distance < 0.5) {
       alert("✅ Match Found! Redirecting...");
       setIsUserIdentified(true);
+      
       router.push("/attendance");
     } else {
       alert("❌ No Match! Try Again.");

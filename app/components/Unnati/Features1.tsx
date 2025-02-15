@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PaymentButton from "../PaymentButton";
 
 interface Features1Props {
   feature1ImgAlt?: string;
@@ -68,6 +69,7 @@ const Features1: React.FC<Features1Props> = ({
             <div className="features1-content1">
               <h2 className="thq-heading-2">{feature1Title}</h2>
               <span className="thq-body-small">{feature1Description}</span>
+            
             </div>
           </div>
           <div

@@ -53,7 +53,7 @@ export default function Fin() {
   image7Alt="Hero Image"
   image12Alt="Hero Image"
   image2Alt="Hero Image"
-  image6Src="https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2Mnw&ixlib=rb-4.0.3&q=80&w=1080"
+  image6Src="https://5.imimg.com/data5/SELLER/Default/2021/6/HF/PV/RK/32877938/residential-building-security-guard-services.jpg"
   image12Src="https://images.unsplash.com/photo-1514924013411-cbf25faa35bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2Mnw&ixlib=rb-4.0.3&q=80&w=1080"
   image3Alt="Hero Image"
   image9Src="https://i.pinimg.com/736x/b1/9d/9a/b19d9a14b46cc9e1b321f331a20c240d.jpg"
@@ -67,9 +67,9 @@ export default function Fin() {
   image4Alt="Hero Image"
   heading1="Transforming Urban Security"
   content1="Empower your security operations with our comprehensive platform. Enhance transparency, coordination, and oversight for authorities, businesses, and communities."
-  image10Src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2NHw&ixlib=rb-4.0.3&q=80&w=1080"
+  image10Src="https://i0.wp.com/opssecuritygroup.com/wp-content/uploads/2021/09/two-security-guards-monitor-cameras.jpg?fit=900%2C1350&ssl=1"
   image9Alt="Hero Image"
-  image1Src="https://images.unsplash.com/photo-1672357867665-4e4f7392edce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczOTUwODY2NHw&ixlib=rb-4.0.3&q=80&w=1080"
+  image1Src="https://images.jdmagicbox.com/quickquotes/images_main/commercial-security-guard-service-for-society-2223350025-hl2p5is7.jpg"
 />
      {/* <PaymentButton amount={1}/>  */}
 

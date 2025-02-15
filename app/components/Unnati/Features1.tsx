@@ -18,11 +18,11 @@ interface Features1Props {
 
 const Features1: React.FC<Features1Props> = ({
   feature1ImgAlt = 'Security Guard Database Image Alt',
-  feature3Description = 'Admin, Police, Society Owners, and Field Users access levels.',
+  feature3Description = 'Admin, Guards, Society Owners, and Field Users access levels.',
   feature3Title = 'Multi-Level Access Control',
   feature3ImgSrc = 'https://types.blog/wp-content/uploads/2023/12/types-of-security-guard-access-control.jpg',
   feature1ImgSrc = 'https://s39569.pcdn.co/wp-content/uploads/2022/03/female-security-guard-sitting-back-and-monitoring-modern-cctv-cameras.jpg',
-  feature2Description = 'Track guards in real time via GPS.',
+  feature2Description = 'Track guards in real time via Geolocation.',
   feature1Title = 'Security Guard Database',
   feature3ImgAlt = 'Multi-Level Access Control Image Alt',
   feature1Description = 'Maintain structured records of personnel.',

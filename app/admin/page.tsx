@@ -122,7 +122,9 @@ const MapComponent = () => {
         mapInstanceRef.current = null;
       }
     };
-  }, []);
+
+    initializeMap();
+  }, [mapLoaded]);
 
   // Update markers when data changes
   useEffect(() => {
@@ -151,6 +153,34 @@ const MapComponent = () => {
       });
     });
   }, [data]);
+    const updateMarkers = async () => {
+      if (!mapRef.current || !mapLoaded) return;
+
+      const L = (await import('leaflet')).default;
+      markersRef.current.forEach((marker) => marker.remove());
+      markersRef.current = [];
+
+      data.forEach((user) => {
+        const marker = L.marker([user.coords.latitude, user.coords.longitude], {
+          icon: L.icon({
+            iconUrl:
+              "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl:
+              "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+            shadowSize: [41, 41],
+          }),
+        }).addTo(mapRef.current);
+
+        marker.bindPopup(`${user.name || user.coords.name}`).openPopup();
+        markersRef.current.push(marker);
+      });
+    };
+
+    updateMarkers();
+  }, [data, mapLoaded]);
 
   return (
     <div>
@@ -173,9 +203,7 @@ const MapComponent = () => {
             />
           </div>
 
-          {/* Map and Lists Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Map Section */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow">
                 <div className="p-4 border-b border-gray-200">

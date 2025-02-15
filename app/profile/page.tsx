@@ -88,22 +88,15 @@ const Page = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-screen">
       <div className="text-3xl text-center font-bold">Dashboard</div>
       {session?.user ? (
         <>
           <p className="text-center mt-4">Hello, {session.user.name}</p>
           <Profile visitor={visitor} />
-          <div className="text-center mt-4">
-            <Link
-              href="/api/auth/signout"
-              className="font-bold text-2xl bg-[#FF9D23] rounded-lg text-white px-4 py-2 w-fit"
-            >
-              Logout
-            </Link>
-          </div>
+          
           <div>
-            <GuardFeedback />
+            
           </div>
         </>
       ) : (

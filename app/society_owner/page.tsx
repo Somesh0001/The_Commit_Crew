@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Link } from "lucide-react";
 interface SocietyOwner {
@@ -27,6 +27,7 @@ const Page = () => {
   const router = useRouter();
   const [ownerDetails, setOwnerDetails] = useState<SocietyOwner | null>(null);
   const [guards, setGuards] = useState<Guard[]>([]);
+  console.log("guard",guards);
   const [selectedGuard, setSelectedGuard] = useState<string | null>(null);
   const [selectedGuardDetails, setSelectedGuardDetails] =
     useState<Guard | null>(null);
@@ -304,22 +305,17 @@ const Page = () => {
       </div>
       <div className="flex w-full justify-around items-center">
         <div className="mt-6 flex gap-4">
+        
           <button
             onClick={handleNotify}
             className="px-32 py-4 bg-blue-600 text-white rounded-xl text-xl font-semibold tracking-wide hover:bg-blue-700"
           >
             Notify
           </button>
+         
         </div>
-        <div className="text-center rounded-xl text-xl font-semibold tracking-wide px-32 py-4 mt-4">
-            <Link
-              href="/api/auth/signout"
-              className=" bg-[#FF9D23] rounded-xl text-xl font-semibold tracking-wide px-32 py-4 w-full"
-            >
-              Logout
-            </Link>
-            </div>
       </div>
+
       {showNotifyModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">

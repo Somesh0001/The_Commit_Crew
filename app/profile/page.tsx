@@ -89,7 +89,7 @@ const Page = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-screen">
       <div className="text-3xl text-center font-bold">Dashboard</div>
 
       {session?.user ? (
@@ -113,7 +113,7 @@ const Page = () => {
             </Link>
           </div> */}
           <div>
-            <GuardFeedback />
+            
           </div>
         </>
       ) : (

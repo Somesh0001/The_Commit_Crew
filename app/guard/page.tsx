@@ -50,7 +50,7 @@ const Page = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className=" bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Profile Header */}
         <div className="bg-blue-600 p-6 flex flex-wrap gap-4 items-center justify-between">
           <div className="flex items-center gap-4">

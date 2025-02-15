@@ -40,11 +40,11 @@ const Page = () => {
     socketRef.current = io(ENDPOINT);
   };
 
-  const disconnectSocket = () => {
-    if (socketRef.current) {
-      socketRef.current.emit("disconnect");
-    }
-  };
+  // const disconnectSocket = () => {
+  //   if (socketRef.current) {
+  //     socketRef.current.emit("disconnect");
+  //   }
+  // };
 
   useEffect(() => {
     setInterval(() => {

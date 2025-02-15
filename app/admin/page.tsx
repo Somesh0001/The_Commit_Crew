@@ -3,7 +3,6 @@ import { MapPin, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import AlertsList from "../components/DashboardComponents/AlertsList";
-import ChartPage from "../components/DashboardComponents/ChartPage";
 import GuardsList from "../components/DashboardComponents/GuardList";
 import StatsCard from "../components/DashboardComponents/StatsCard";
 
@@ -17,123 +16,148 @@ const MapComponent = () => {
       coords: { latitude: number; longitude: number };
     }[]
   >([]);
+  
+  const socketRef = useRef<Socket | null>(null);
+  const mapRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
+  const mapInstanceRef = useRef<any>(null);
+  
+  const [guards, setGuards] = useState(0);
+  const [zones, setZones] = useState(0);
+  
   const connectSocket = () => {
-    socketRef.current = io(ENDPOINT);
+    if (typeof window !== 'undefined') {
+      socketRef.current = io(ENDPOINT);
+    }
   };
 
   const disconnectSocket = () => {
     if (socketRef.current) {
-      socketRef.current.emit("disconnect");
+      socketRef.current.disconnect();
     }
   };
 
-  const socketRef = useRef<Socket>(null);
-  const mapRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
-  const [guards, setGuards] = useState(0);
-  const [zones, setZones] = useState(0);
-  const [mapLoaded, setMapLoaded] = useState(false);
-  
   const getStats = async () => {
     try {
-        const response = await fetch("/api/getActiveGuardsZones", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error("Failed to fetch stats");
-        }
+      const response = await fetch("/api/getActiveGuardsZones", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch stats");
+      }
 
-        const data = await response.json();
-        setGuards(data.totalGuards || 0);
-        setZones(data.totalSocieties || 0);
+      const data = await response.json();
+      
+      // Update state with fetched data
+      setGuards(data.totalGuards || 0);
+      setZones(data.totalSocieties || 0);
     } catch (error) {
-        console.error("Error fetching stats:", error);
+      console.error("Error fetching stats:", error);
     }
   };
 
+  // Initialize socket connection
   useEffect(() => {
-    connectSocket();
-    if (socketRef.current) {
-      socketRef.current.emit("get-data");
-      socketRef.current.on("message", (datas) => {
-        setData(datas);
-      });
-      socketRef.current.on("new-user", (data) => {
-        setData((users) => [...users, data]);
-      });
+    if (typeof window !== 'undefined') {
+      connectSocket();
+      
+      if (socketRef.current) {
+        socketRef.current.emit("get-data");
+        
+        socketRef.current.on("message", (datas) => {
+          setData(datas);
+        });
+        
+        socketRef.current.on("new-user", (userData) => {
+          setData((users) => [...users, userData]);
+        });
+      }
+      
+      getStats();
+      
+      return () => {
+        disconnectSocket();
+      };
     }
-    getStats();
   }, []);
 
+  // Initialize Leaflet map
   useEffect(() => {
-    let L: any;
-    const initializeMap = async () => {
-      if (typeof window !== "undefined" && !mapLoaded) {
-        L = (await import('leaflet')).default;
-        await import('leaflet/dist/leaflet.css');
-
-        const map = L.map("map").setView([0, 0], 2);
-        mapRef.current = map;
-
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors",
-        }).addTo(map);
-
-        const onLocationFound = (e: any): void => {
-          const radius: number = e.accuracy / 2;
-        };
-
-        map.locate({ setView: true, maxZoom: 16 });
-        map.on("locationfound", onLocationFound);
-        setMapLoaded(true);
-
-        return () => {
-          map.off("locationfound", onLocationFound);
-          map.remove();
-        };
+    if (typeof window !== 'undefined' && !mapInstanceRef.current) {
+      // Dynamically import Leaflet only on client-side
+      import('leaflet').then((L) => {
+        // Import CSS
+        import('leaflet/dist/leaflet.css');
+        
+        if (!mapInstanceRef.current && mapRef.current) {
+          const map = L.map('map').setView([0, 0], 2);
+          mapInstanceRef.current = map;
+          
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors",
+          }).addTo(map);
+          
+          interface LocationEvent {
+            accuracy: number;
+            latlng: L.LatLng;
+          }
+          
+          const onLocationFound = (e: LocationEvent): void => {
+            const radius: number = e.accuracy / 2;
+          };
+          
+          map.locate({ setView: true, maxZoom: 16 });
+          map.on("locationfound", onLocationFound);
+        }
+      });
+    }
+    
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
       }
     };
+  }, []);
 
-    initializeMap();
-  }, [mapLoaded]);
-
+  // Update markers when data changes
   useEffect(() => {
-    const updateMarkers = async () => {
-      if (!mapRef.current || !mapLoaded) return;
-
-      const L = (await import('leaflet')).default;
+    if (!mapInstanceRef.current || typeof window === 'undefined') return;
+    
+    import('leaflet').then((L) => {
+      // Clear existing markers
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
-
+      
+      // Add new markers
       data.forEach((user) => {
         const marker = L.marker([user.coords.latitude, user.coords.longitude], {
           icon: L.icon({
-            iconUrl:
-              "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
-            shadowUrl:
-              "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
             shadowSize: [41, 41],
           }),
-        }).addTo(mapRef.current);
-
-        marker.bindPopup(`${user.name || user.coords.name}`).openPopup();
+        }).addTo(mapInstanceRef.current);
+        
+        marker.bindPopup(`${user.name}`).openPopup();
         markersRef.current.push(marker);
       });
-    };
-
-    updateMarkers();
-  }, [data, mapLoaded]);
+    });
+  }, [data]);
 
   return (
     <div>
       <div className="w-full">
+        {/* Main Content */}
         <main className="px-4 sm:px-6 lg:px-8 py-8">
+          {/* Stats Grid */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
             <StatsCard
               title="Active Guards"
@@ -149,7 +173,9 @@ const MapComponent = () => {
             />
           </div>
 
+          {/* Map and Lists Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Map Section */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow">
                 <div className="p-4 border-b border-gray-200">
@@ -158,16 +184,17 @@ const MapComponent = () => {
                   </h2>
                 </div>
                 <div className="p-4 z-0">
-                  {JSON.stringify(data)}
                   <div
                     id="map"
+                    ref={mapRef}
                     className="z-0"
-                    style={{ width: "50vw", height: "50vh" }}
+                    style={{ width: "100%", height: "50vh" }}
                   ></div>
                 </div>
               </div>
             </div>
 
+            {/* Guards List */}
             <div className="space-y-8">
               <div className="bg-white rounded-lg shadow">
                 <div className="p-4 border-b border-gray-200">

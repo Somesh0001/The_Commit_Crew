@@ -3,7 +3,7 @@
 import React from "react";
 import Script from "dangerous-html/react";
 import Image from "next/image";
-
+import Link from "next/link";
 interface HeroProps {
   heading1: string;
   content1: string;
@@ -45,12 +45,13 @@ const Hero: React.FC<HeroProps> = (props) => {
             <p className="hero-text2 thq-body-large">{props.content1}</p>
           </div>
           <div className="hero-actions">
-            <button className="thq-button-filled hero-button1">
-              <span className="thq-body-small">{props.action1}</span>
-            </button>
-            <button className="thq-button-outline hero-button2">
-              <span className="thq-body-small">{props.action2}</span>
-            </button>
+            <Link href="/signin">
+          <button className="thq-button-filled hero-button1">
+          <span className="thq-body-small">{props.action1}</span>
+                  </button>
+                </Link>
+        
+          
           </div>
         </div>
         

@@ -10,7 +10,6 @@ import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/UserContext";
 
-
 const ENDPOINT = "http://localhost:4000";
 
 const Page = () => {
@@ -218,6 +217,10 @@ const Page = () => {
   function handleStartAttendance() {
     // Open the fingerprint modal
     setModalOpen(true);
+  
+    toast({
+      title: "Attendance tracking started", 
+    });
   }
 function handleVerifyPerson () 
 {
@@ -235,37 +238,7 @@ function handleVerifyPerson ()
       </Button>
 
       {/* Fingerprint Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-black opacity-50"
-            onClick={() => setModalOpen(false)}
-          ></div>
-          {/* Modal Content */}
-          <div className="relative bg-white rounded shadow-lg p-8 z-10 w-80">
-            <h2 className="text-xl font-semibold mb-2">
-              Fingerprint Verification
-            </h2>
-            <p className="mb-4">
-              Please scan your fingerprint to mark your attendance.
-            </p>
-            <Button
-              onClick={handleFingerprintVerification}
-              disabled={isVerifying}
-            >
-              {isVerifying ? "Verifying..." : "Scan Fingerprint"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setModalOpen(false)}
-              className="mt-2"
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 };

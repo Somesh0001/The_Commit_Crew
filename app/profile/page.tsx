@@ -137,7 +137,7 @@ const Page = () => {
     
   return (
     <div className="p-4 h-screen">
-      <div className="text-3xl text-center font-bold">Dashboard</div>
+      <div className="text-3xl text-center font-bold"> Profile </div>
 
       {session?.user ? (
         <>
